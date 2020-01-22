@@ -1,26 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIUnit : MonoBehaviour
+public class AIUnit : MonoBehaviour, AIInterface
 {
-    //Different AI states
-    private enum AIState
-    {
-        None,
-        Roaming,
-        Chase,
-        Patrol
-    }
 
     [SerializeField] AIGrid aiGrid = null;
     [SerializeField] public float unitSpeed = 1.0f;
-    [SerializeField] AIState state;
     [SerializeField] Vector3 targetPos;
+    [SerializeField] float movementStopDist = 0.5f;
+
+    Action nextTask = delegate { };
+    bool hasCompletedCurrentTask = false;
 
     private float unitHeight = 1.0f;
-
-    float waitTime = 1.0f;
 
     List<Vector3> currentPath = null;
     int currentPathIndex = 0;
@@ -28,8 +22,8 @@ public class AIUnit : MonoBehaviour
     void Awake()
     {
         targetPos = transform.position;
-        state = AIState.None;
     }
+    
 
     // Start is called before the first frame update
     void Start()
@@ -50,42 +44,13 @@ public class AIUnit : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        //State machine for AI behaviour
-        switch (state)
+    {     
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            case AIState.None:
-                //Check for keyboard press
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    //Randomly generate position and attempt to move there
-                    targetPos = new Vector3(Random.Range(0, 50), unitHeight, Random.Range(0, 50));
-                    Debug.Log("Moving to " + targetPos);
-                    SetTargetPosition(targetPos);
-                }
-                break;
-            case AIState.Roaming:
-                //If at destination and roam wait time has exceeded, calculate new roam position
-                if (Vector3.Distance(transform.position, targetPos) < 1.0f && Time.time >= waitTime)
-                {
-                    int x = (int)transform.position.x + Random.Range(-10, 10);
-                    int z = (int)transform.position.z + Random.Range(-10, 10);
-                    targetPos = new Vector3(x, unitHeight, z);
-                    Debug.Log("Roaming to " + targetPos);
-                    SetTargetPosition(targetPos);
-                    waitTime = Random.Range(0.0f, 10.0f) + Time.time;
-                }
-                break;
-            case AIState.Chase:
-                if (Time.time >= waitTime)
-                {
-                    targetPos = GetNearestThreatPosition();
-                    targetPos.y = unitHeight;
-                    Debug.Log("Chasing to " + targetPos);
-                    SetTargetPosition(targetPos);
-                    waitTime = Time.time + 2.0f;
-                }
-                break;
+            //Randomly generate position and attempt to move there
+            targetPos = new Vector3(UnityEngine.Random.Range(0, 50), unitHeight, UnityEngine.Random.Range(0, 50));
+            Debug.Log("Moving to " + targetPos);
+            SetTargetPosition(targetPos);
         }
         Move();
     }
@@ -98,8 +63,8 @@ public class AIUnit : MonoBehaviour
         {
             //Get target pos
             Vector3 targetPos = currentPath[currentPathIndex];
-            //If within a certain range of area, stop moving
-            if (Vector3.Distance(transform.position, targetPos) > 0.1f)
+            //If within a certain range of next node
+            if (Vector3.Distance(transform.position, targetPos) > movementStopDist)
             {
                 //Actual transformation
                 Vector3 moveDir = (targetPos - transform.position).normalized;
@@ -113,6 +78,16 @@ public class AIUnit : MonoBehaviour
                 if(currentPathIndex >= currentPath.Count)
                 {
                     StopMoving();
+                    hasCompletedCurrentTask = true;
+                }
+            }
+
+            if (hasCompletedCurrentTask == true)
+            {
+                if (nextTask != null)
+                {
+                    nextTask.Invoke();
+                    nextTask = null;
                 }
             }
         }
@@ -123,6 +98,7 @@ public class AIUnit : MonoBehaviour
     {
         currentPath = null;
     }
+
 
     //Sets the target position for movement.
     public void SetTargetPosition(Vector3 target)
@@ -142,52 +118,18 @@ public class AIUnit : MonoBehaviour
         }
     }
 
-    //Function to return the nearest threat's position
-    public Vector3 GetNearestThreatPosition()
+    public void MoveTo(Vector3 position, float stoppingDistance, Action onArrivedAtPosition)
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
+        Debug.Log("Moving to" + position);
+        targetPos = position;
+        SetTargetPosition(position);
+        movementStopDist = stoppingDistance;
+        hasCompletedCurrentTask = false;
+        nextTask = onArrivedAtPosition;
+    }
 
-        List<GameObject> targets = new List<GameObject>();
-
-        //Add all players found to target list
-        for (int i = 0; i < players.Length; i++)
-        {
-            targets.Add(players[i]);
-        }
-
-        //Add all buildings found to target list
-        for (int i = 0; i < buildings.Length; i++)
-        {
-            targets.Add(buildings[i]);
-        }
-
-        GameObject nearestTarget = null;
-        float nearestDistance = float.MaxValue;
-
-        Debug.Log(targets.Count);
-
-        //Get nearest target
-        for (int i = 0; i < targets.Count; i++)
-        {
-            float distance = Vector3.Distance(transform.position, targets[i].transform.position);
-            if (distance < nearestDistance)
-            {
-                nearestDistance = distance;
-                nearestTarget = targets[i];
-            }
-        }
-
-        //If no targets found
-        if(nearestTarget == null)
-        {
-            Vector3 selfPos = transform.position;
-            selfPos.y = unitHeight;
-            return selfPos;
-        }
-
-        Vector3 pos = nearestTarget.transform.position;
-        pos.y = unitHeight;
-        return pos;
+    public bool IsIdle()
+    {
+        return hasCompletedCurrentTask;
     }
 }

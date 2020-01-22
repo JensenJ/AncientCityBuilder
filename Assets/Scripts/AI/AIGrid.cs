@@ -11,7 +11,7 @@ public class AIGrid : MonoBehaviour
     [SerializeField] float walkableCheckRadius = 0.0f;
     [SerializeField] bool showDebug = false;
 
-    private void Start()
+    private void Awake()
     {
         gridOriginPosition += transform.position;
         pathfinding = new Pathfinding(gridSize.x, gridSize.y, gridOriginPosition, unwalkableMasks, walkableCheckRadius, showDebug);
