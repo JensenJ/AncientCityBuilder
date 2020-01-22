@@ -673,11 +673,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiGrid: {fileID: 1693821869}
-  unitSpeed: 1
+  unitSpeed: 4
   targetPos: {x: 0, y: 0, z: 0}
   movementStopDist: 0.5
   resourceTransform: {fileID: 96365285}
   storageTransform: {fileID: 1676709339}
+  inventoryAmount: 0
 --- !u!1 &1211789349
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,6 +873,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1693821870}
   - component: {fileID: 1693821869}
+  - component: {fileID: 1693821871}
   m_Layer: 0
   m_Name: AIGrid
   m_TagString: AIGrid
@@ -912,3 +914,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1693821871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693821868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcdd45f3c5ea2e74497669b287aba696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceTransform: {fileID: 96365285}
+  storageTransform: {fileID: 1676709339}

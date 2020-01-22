@@ -12,7 +12,7 @@ public class AIUnit : MonoBehaviour, AIInterface
     [SerializeField] float movementStopDist = 0.5f;
 
     Action nextTask = delegate { };
-    bool hasCompletedCurrentTask = false;
+    [SerializeField] bool hasCompletedCurrentTask = false;
 
     private float unitHeight = 1.0f;
 
@@ -42,21 +42,8 @@ public class AIUnit : MonoBehaviour, AIInterface
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {     
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //Randomly generate position and attempt to move there
-            targetPos = new Vector3(UnityEngine.Random.Range(0, 50), unitHeight, UnityEngine.Random.Range(0, 50));
-            Debug.Log("Moving to " + targetPos);
-            SetTargetPosition(targetPos);
-        }
-        Move();
-    }
-
     //Function for moving
-    private void Move()
+    protected void Move()
     {
         //If there is a path
         if(currentPath != null)
@@ -75,7 +62,7 @@ public class AIUnit : MonoBehaviour, AIInterface
                 //arrived at destination (each node), increment path index
                 currentPathIndex++;
                 //If at final node, stop moving
-                if(currentPathIndex >= currentPath.Count)
+                if (currentPathIndex >= currentPath.Count)
                 {
                     StopMoving();
                     hasCompletedCurrentTask = true;
