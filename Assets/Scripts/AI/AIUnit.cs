@@ -12,7 +12,7 @@ public class AIUnit : MonoBehaviour, AIInterface
     [SerializeField] float movementStopDist = 0.5f;
 
     Action nextTask = delegate { };
-    [SerializeField] bool hasCompletedCurrentTask = false;
+    [SerializeField] bool hasCompletedCurrentTask = true;
 
     private float unitHeight = 1.0f;
 

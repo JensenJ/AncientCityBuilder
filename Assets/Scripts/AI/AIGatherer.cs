@@ -14,7 +14,7 @@ public class AIGatherer : AIUnit
     };
 
 
-    [SerializeField] private Transform resourceTransform = null;
+    [SerializeField] private ResourceNode resourceNode = null;
     [SerializeField] private Transform storageTransform = null;
     [SerializeField] private int inventoryAmount = 0;
 
@@ -30,14 +30,17 @@ public class AIGatherer : AIUnit
         switch (state) {
             //If idle
             case AIState.Idle:
-                resourceTransform = GameHandler.GetResourceNode_Static();
-                state = AIState.MovingToResource;
+                resourceNode = GameHandler.GetResourceNode_Static();
+                if(resourceNode != null)
+                {
+                    state = AIState.MovingToResource;
+                }
                 break;
             //If moving to resource
             case AIState.MovingToResource:
                 if (IsIdle())
                 {
-                    MoveTo(resourceTransform.position, 0.5f, () =>
+                    MoveTo(resourceNode.GetPosition(), 0.5f, () =>
                     {
                         state = AIState.Gathering;
                     });
@@ -47,13 +50,14 @@ public class AIGatherer : AIUnit
             case AIState.Gathering:
                 if (IsIdle())
                 {
-                    if(inventoryAmount > 0)
+                    if(inventoryAmount >= 5)
                     {
                         storageTransform = GameHandler.GetStorageNode_Static();
                         state = AIState.MovingToStorage;
                     }
                     else
                     {
+                        resourceNode.GrabResource();
                         inventoryAmount++;
                     }
                 }
@@ -63,6 +67,7 @@ public class AIGatherer : AIUnit
                 {
                     MoveTo(storageTransform.position, 0.5f, () =>
                     {
+                        GameResources.AddGoldAmount(inventoryAmount);
                         inventoryAmount = 0;
                         state = AIState.Idle;
                     });
