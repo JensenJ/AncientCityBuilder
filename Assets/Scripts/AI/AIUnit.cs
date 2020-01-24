@@ -14,8 +14,6 @@ public class AIUnit : MonoBehaviour, AIInterface
     Action nextTask = delegate { };
     [SerializeField] bool hasCompletedCurrentTask = true;
 
-    private float unitHeight = 1.0f;
-
     List<Vector3> currentPath = null;
     int currentPathIndex = 0;
 
@@ -45,6 +43,8 @@ public class AIUnit : MonoBehaviour, AIInterface
     //Function for moving
     protected void Move()
     {
+
+        bool hasRotated = false;
         //If there is a path
         if(currentPath != null)
         {
@@ -55,12 +55,28 @@ public class AIUnit : MonoBehaviour, AIInterface
             {
                 //Actual transformation
                 Vector3 moveDir = (targetPos - transform.position).normalized;
+
+                //Check if rotation is complete
+                Quaternion.LookRotation(targetPos, Vector3.up);
+
+                //transform.rotation = Quaternion.Euler(-90, transform.rotation.y, transform.rotation.z);
+
                 transform.position = transform.position + moveDir * unitSpeed * Time.deltaTime;
+
+                //Only move when rotation has finished
+                if (hasRotated == true)
+                {
+
+                }
+
+
             }
             else
             {
                 //arrived at destination (each node), increment path index
                 currentPathIndex++;
+                hasRotated = false;
+
                 //If at final node, stop moving
                 if (currentPathIndex >= currentPath.Count)
                 {

@@ -15,11 +15,10 @@ public class AIGatherer : AIUnit
 
 
     [SerializeField] private ResourceNode resourceNode = null;
-    [SerializeField] private Transform storageTransform = null;
+    [SerializeField] private StorageNode storageNode = null;
     [SerializeField] private int inventoryAmount = 0;
 
     private AIState state;
-
     private void Awake()
     {
         state = AIState.Idle;
@@ -52,7 +51,7 @@ public class AIGatherer : AIUnit
                 {
                     if(inventoryAmount >= 5)
                     {
-                        storageTransform = GameHandler.GetStorageNode_Static();
+                        storageNode = GameHandler.GetStorageNode_Static();
                         state = AIState.MovingToStorage;
                     }
                     else
@@ -65,7 +64,7 @@ public class AIGatherer : AIUnit
             case AIState.MovingToStorage:
                 if (IsIdle())
                 {
-                    MoveTo(storageTransform.position, 0.5f, () =>
+                    MoveTo(storageNode.GetPosition(), 0.5f, () =>
                     {
                         GameResources.AddGoldAmount(inventoryAmount);
                         inventoryAmount = 0;

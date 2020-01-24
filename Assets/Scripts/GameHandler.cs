@@ -9,6 +9,7 @@ public class GameHandler : MonoBehaviour
     [SerializeField] public Transform storageTransform = null;
 
     private List<ResourceNode> resourceNodeList;
+    private List<StorageNode> storageNodeList;
 
     void Awake()
     {
@@ -16,6 +17,8 @@ public class GameHandler : MonoBehaviour
 
         resourceNodeList = new List<ResourceNode>();
         resourceNodeList.Add(new ResourceNode(resourceTransform, false));
+        storageNodeList = new List<StorageNode>();
+        storageNodeList.Add(new StorageNode(storageTransform));
     }
 
     private ResourceNode GetResourceNode()
@@ -49,12 +52,12 @@ public class GameHandler : MonoBehaviour
         return instance.GetResourceNode();
     }
 
-    private Transform GetStorageNode()
+    private StorageNode GetStorageNode()
     {
-        return storageTransform;
+        return storageNodeList[UnityEngine.Random.Range(0, storageNodeList.Count)];
     }
 
-    public static Transform GetStorageNode_Static()
+    public static StorageNode GetStorageNode_Static()
     {
         return instance.GetStorageNode();
     }
