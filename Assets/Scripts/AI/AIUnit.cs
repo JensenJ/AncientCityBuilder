@@ -40,6 +40,11 @@ public class AIUnit : MonoBehaviour, AIInterface
         }
     }
 
+    private void OnMouseDown()
+    {
+        RTSCameraController.instance.followTransform = transform;
+    }
+
     //Function for moving
     protected void Move()
     {
