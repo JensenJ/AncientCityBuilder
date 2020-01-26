@@ -8,7 +8,7 @@ public class WindowGameResources : MonoBehaviour
 {
     private void Awake()
     {
-        GameResources.onGoldAmountChanged += delegate (object sender, EventArgs e)
+        GameResources.OnGoldAmountChanged += delegate (object sender, EventArgs e)
         {
             UpdateResourceTextObject();
         };

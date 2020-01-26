@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIUnit : MonoBehaviour, AIInterface
+[RequireComponent(typeof(SelectableObject))]
+public class AIUnit : MonoBehaviour
 {
 
     [SerializeField] AIGrid aiGrid = null;
@@ -20,8 +21,17 @@ public class AIUnit : MonoBehaviour, AIInterface
     void Awake()
     {
         targetPos = transform.position;
+        CreateEvents();
     }
     
+    protected void CreateEvents()
+    {
+        SelectableObject.OnObjectSelected += delegate (object sender, EventArgs e)
+        {
+            SelectUnit();
+        };
+
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,9 +50,9 @@ public class AIUnit : MonoBehaviour, AIInterface
         }
     }
 
-    private void OnMouseDown()
+    public void SelectUnit()
     {
-        RTSCameraController.instance.followTransform = transform;
+        RTSCameraController.instance.followTransform = SelectableObject.GetSelectedObject();
     }
 
     //Function for moving

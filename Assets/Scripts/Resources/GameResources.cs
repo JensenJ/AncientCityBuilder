@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class GameResources
 {
-    public static event EventHandler onGoldAmountChanged;
+    public static event EventHandler OnGoldAmountChanged;
 
     private static int goldAmount;
 
     public static void AddGoldAmount(int amount)
     {
         goldAmount += amount;
-        onGoldAmountChanged?.Invoke(null, EventArgs.Empty);
+        OnGoldAmountChanged?.Invoke(null, EventArgs.Empty);
     }
 
     public static int GetGoldAmount()

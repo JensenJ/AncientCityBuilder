@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AIGatherer : AIUnit
 {
-
     enum AIState 
     {
         Idle,
@@ -12,7 +12,6 @@ public class AIGatherer : AIUnit
         Gathering,
         MovingToStorage
     };
-
 
     [SerializeField] private ResourceNode resourceNode = null;
     [SerializeField] private StorageNode storageNode = null;
@@ -22,6 +21,8 @@ public class AIGatherer : AIUnit
     private void Awake()
     {
         state = AIState.Idle;
+
+        CreateEvents();
     }
 
     private void Update()
@@ -73,7 +74,6 @@ public class AIGatherer : AIUnit
                 }
                 break;
         }
-
         Move();
     }
 }
