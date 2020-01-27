@@ -15,10 +15,14 @@ public class GameHandler : MonoBehaviour
     {
         instance = this;
 
-        resourceNodeList = new List<ResourceNode>();
-        resourceNodeList.Add(new ResourceNode(resourceTransform, false));
-        storageNodeList = new List<StorageNode>();
-        storageNodeList.Add(new StorageNode(storageTransform));
+        resourceNodeList = new List<ResourceNode>
+        {
+            new ResourceNode(resourceTransform, false)
+        };
+        storageNodeList = new List<StorageNode>
+        {
+            new StorageNode(storageTransform)
+        };
     }
 
     private ResourceNode GetResourceNode()

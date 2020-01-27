@@ -2,32 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Camera controller in a RTS mode
 public class RTSCameraController : MonoBehaviour
 {
+    //Singleton instance
     public static RTSCameraController instance;
 
+    //Transform references
     public Transform cameraTransform;
     public Transform followTransform;
 
-    public bool canMove = true;
-    public float fastSpeed;
-    public float normalSpeed;
-    public float movementSpeed;
-    public float movementTime;
-    public float rotationAmount;
-    public Vector3 zoomAmount;
+    //Control variables
+    [SerializeField] bool canMove = true;
+    [SerializeField] [Range(1.0f, 5.0f)] float fastSpeed = 3;
+    [SerializeField] [Range(0.1f, 3.0f)] float normalSpeed = 0.5f;
+    [SerializeField] [Range(1.0f, 20.0f)] float movementTime = 5;
+    [SerializeField] [Range(20.0f, 60.0f)] float minZoom = 40;
+    [SerializeField] [Range(80.0f, 400.0f)] float maxZoom = 200;
+    [SerializeField] [Range(0.5f, 5.0f)] float rotationAmount = 1.0f;
+    [SerializeField] Vector3 zoomAmount = new Vector3(0.0f, -10.0f, 10.0f);
 
-    public Vector3 newPosition;
-    public Quaternion newRotation;
-    public Vector3 newZoom;
-
-    public float minZoom;
-    public float maxZoom;
-
-    public Vector3 dragStartPosition;
-    public Vector3 dragCurrentPosition;
-    public Vector3 rotateStartPosition;
-    public Vector3 rotateCurrentPosition;
+    //Runtime variables
+    float movementSpeed;
+    Vector3 newPosition;
+    Quaternion newRotation;
+    Vector3 newZoom;
+    Vector3 dragStartPosition;
+    Vector3 dragCurrentPosition;
+    Vector3 rotateStartPosition;
+    Vector3 rotateCurrentPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +47,7 @@ public class RTSCameraController : MonoBehaviour
     {
         if(followTransform != null)
         {
+            //Set position to AI but allow rotation and zoom
             newPosition = followTransform.position;
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
             RotateCamera();
@@ -51,6 +55,7 @@ public class RTSCameraController : MonoBehaviour
         }
         else
         {
+            //Allow free movement
             PanCamera();
             RotateCamera();
             ZoomCamera();
@@ -58,42 +63,44 @@ public class RTSCameraController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            //Stop following target
             followTransform = null;
         }
     }
 
+    //Function to pan camera (translate)
     void PanCamera()
     {
+        //If allowed to move
         if (canMove)
         {
             //Dragging world with mouse click, panning
             if (Input.GetMouseButtonDown(0))
             {
+                //Create plane and raycast it
                 Plane plane = new Plane(Vector3.up, Vector3.zero);
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
                 float entry;
 
                 if (plane.Raycast(ray, out entry))
                 {
+                    //Get ray hit position
                     dragStartPosition = ray.GetPoint(entry);
                 }
             }
 
-            //Dragging world with mouse click, panning
+            //If still holding mouse down
             if (Input.GetMouseButton(0))
             {
+                //Create plane and raycast it
                 Plane plane = new Plane(Vector3.up, Vector3.zero);
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
                 float entry;
 
                 if (plane.Raycast(ray, out entry))
                 {
+                    //Set position
                     dragCurrentPosition = ray.GetPoint(entry);
-
                     newPosition = transform.position + dragStartPosition - dragCurrentPosition;
                 }
             }
@@ -135,22 +142,24 @@ public class RTSCameraController : MonoBehaviour
         }
     }
 
-
+    //Function to rotate camera
     void RotateCamera()
     {
+        //If can move
         if (canMove)
         {
+            //If holding middle mouse button
             if (Input.GetMouseButtonDown(2))
             {
                 rotateStartPosition = Input.mousePosition;
             }
+            //If still holding middle mouse button
             if (Input.GetMouseButton(2))
             {
+                //Calculate new rotation
                 rotateCurrentPosition = Input.mousePosition;
-
                 Vector3 difference = rotateStartPosition - rotateCurrentPosition;
                 rotateStartPosition = rotateCurrentPosition;
-
                 newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / 5f));
             }
 
@@ -165,12 +174,14 @@ public class RTSCameraController : MonoBehaviour
                 newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
             }
         }
+        //Lerping
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
     }
 
     //Function for handling zooming on camera
     void ZoomCamera()
     {
+        //If can move
         if (canMove)
         {
             //Mouse scrolling
