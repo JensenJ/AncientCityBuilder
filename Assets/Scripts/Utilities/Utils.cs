@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public static class Utilities
+public static class Utils
 {
     public static TextMeshPro CreateWorldText(string text, Transform parent = null, Vector3 localPosition = default(Vector3), 
         int fontsize = 40, Color? color = null, TextAlignmentOptions textAlignment = TextAlignmentOptions.Center)
