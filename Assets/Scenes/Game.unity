@@ -1137,7 +1137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1313431382}
-  - component: {fileID: 1313431383}
+  - component: {fileID: 1313431384}
   m_Layer: 0
   m_Name: EntityTesting
   m_TagString: Untagged
@@ -1159,7 +1159,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1313431383
+--- !u!114 &1313431384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1168,11 +1168,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1313431381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f062fdeda7ed07409175b32e8a635b8, type: 3}
+  m_Script: {fileID: 11500000, guid: eec1510f0e82d374a918f444a39731e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 2100000, guid: df17137a6a5f800409eaa20f453f3d97, type: 2}
 --- !u!1 &1371903169
 GameObject:
   m_ObjectHideFlags: 0
