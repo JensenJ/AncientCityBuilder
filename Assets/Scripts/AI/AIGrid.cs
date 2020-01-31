@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Pathfinder))]
 public class AIGrid : MonoBehaviour
 {
-    private Pathfinding pathfinding;
+    private Pathfinder pathfinding;
     [SerializeField] LayerMask[] unwalkableMasks = null;
     [SerializeField] Vector2Int gridSize = new Vector2Int();
     [SerializeField] Vector3 gridOriginPosition= new Vector3();
@@ -14,7 +15,8 @@ public class AIGrid : MonoBehaviour
     private void Awake()
     {
         gridOriginPosition += transform.position;
-        pathfinding = new Pathfinding(gridSize.x, gridSize.y, gridOriginPosition, unwalkableMasks, walkableCheckRadius, showDebug);
+        //pathfinding = new Pathfinding(gridSize.x, gridSize.y, gridOriginPosition, unwalkableMasks, walkableCheckRadius, showDebug);
+        pathfinding = GetComponent<Pathfinder>();
     }
 
     private void Update()
@@ -25,7 +27,7 @@ public class AIGrid : MonoBehaviour
     //Function to get the path based on the current position passed in and the target location
     public List<Vector3> GetPath(Vector3 currentPos, Vector3 targetLocation)
     {
-        List<Vector3> path = pathfinding.FindPath(currentPos, targetLocation);
+        List<Vector3> path = pathfinding.GetPath(currentPos, targetLocation);
 
         if(path != null)
         {

@@ -11,34 +11,50 @@ public class Pathfinder : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-    private void Update()
+    public List<Vector3> GetPath(Vector3 startPosition, Vector3 endPosition)
     {
-        float startTime = Time.realtimeSinceStartup;
+        //Vectors to int2
+        int2 startPos = new int2((int)startPosition.x, (int)startPosition.z);
+        int2 endPos = new int2((int)endPosition.x, (int)endPosition.z);
 
-        int findPathJobCount = 1;
-        NativeArray<JobHandle> jobHandleArray = new NativeArray<JobHandle>(findPathJobCount, Allocator.Temp);
-        for (int i = 0; i < findPathJobCount; i++)
+        //Job execution
+        NativeArray<int2> path = new NativeArray<int2>(256, Allocator.TempJob);
+        //Set default values for path
+        for (int i = 0; i < path.Length; i++)
         {
-            FindPathJob job = new FindPathJob { startPosition = new int2(0, 0), endPosition = new int2(19, 19) };
-            
-            jobHandleArray[i] = job.Schedule();
+            path[i] = new int2(-1, -1);
         }
 
-        JobHandle.CompleteAll(jobHandleArray);
-        jobHandleArray.Dispose();
+        FindPathJob job = new FindPathJob { startPosition = startPos, endPosition = endPos, finalPath = path };
+        JobHandle handle = job.Schedule();
+        handle.Complete();
 
-        Debug.Log("Time: " + ((Time.realtimeSinceStartup - startTime) * 1000f) + "ms");
+        //Convert to vector3 list
+        List<Vector3> vectorPath = new List<Vector3>();
+        for (int i = 0; i < path.Length; i++)
+        {
+            if(path[i].x != -1 && path[i].y != -1)
+            {
+                vectorPath.Add(new Vector3(path[i].x, 0, path[i].y));
+            }
+        }
+
+        path.Dispose();
+        vectorPath.Reverse();
+        return vectorPath;
     }
 
+    //Job to find path
     [BurstCompile]
     private struct FindPathJob : IJob
     {
         public int2 startPosition;
         public int2 endPosition;
+        public NativeArray<int2> finalPath;
 
         public void Execute()
         {
-            int2 gridSize = new int2(20, 20);
+            int2 gridSize = new int2(40, 40);
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
             for (int x = 0; x < gridSize.x; x++)
@@ -157,6 +173,13 @@ public class Pathfinder : MonoBehaviour
             {
                 //found path
                 NativeList<int2> path = CalculatePath(pathNodeArray, endNode);
+
+                for (int i = 0; i < path.Length; i++)
+                {
+                    
+                    finalPath[i] = path[i];
+                }
+
                 path.Dispose();
             }
 
@@ -213,7 +236,7 @@ public class Pathfinder : MonoBehaviour
         private int CalculateDistanceCost(int2 startPosition, int2 endPosition)
         {
             int xDistance = math.abs(startPosition.x - endPosition.x);
-            int yDistance = math.abs(startPosition.y - startPosition.y);
+            int yDistance = math.abs(startPosition.y - endPosition.y);
             int remaining = math.abs(xDistance - yDistance);
             return MOVE_DIAGONAL_COST * math.min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
         }

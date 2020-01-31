@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Mathematics;
 
 [RequireComponent(typeof(SelectableObject))]
 public class AIUnit : MonoBehaviour
@@ -58,8 +59,6 @@ public class AIUnit : MonoBehaviour
     //Function for moving
     protected void Move()
     {
-
-        bool hasRotated = false;
         //If there is a path
         if(currentPath != null)
         {
@@ -70,27 +69,12 @@ public class AIUnit : MonoBehaviour
             {
                 //Actual transformation
                 Vector3 moveDir = (targetPos - transform.position).normalized;
-
-                //Check if rotation is complete
-                Quaternion.LookRotation(targetPos, Vector3.up);
-
-                //transform.rotation = Quaternion.Euler(-90, transform.rotation.y, transform.rotation.z);
-
                 transform.position = transform.position + moveDir * unitSpeed * Time.deltaTime;
-
-                //Only move when rotation has finished
-                if (hasRotated == true)
-                {
-
-                }
-
-
             }
             else
             {
                 //arrived at destination (each node), increment path index
                 currentPathIndex++;
-                hasRotated = false;
 
                 //If at final node, stop moving
                 if (currentPathIndex >= currentPath.Count)
@@ -117,12 +101,16 @@ public class AIUnit : MonoBehaviour
         currentPath = null;
     }
 
-
     //Sets the target position for movement.
     public void SetTargetPosition(Vector3 target)
     {
         currentPathIndex = 0;
-        currentPath = Pathfinding.Instance.FindPath(transform.position, target);
+        currentPath = aiGrid.GetPath(transform.position, target);
+
+        for (int i = 0; i < currentPath.Count; i++)
+        {
+            Debug.Log(currentPath[i]);
+        }
 
         if(currentPath != null && currentPath.Count > 1)
         {
