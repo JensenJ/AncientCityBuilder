@@ -1138,6 +1138,7 @@ GameObject:
   - component: {fileID: 1313431382}
   - component: {fileID: 1313431384}
   - component: {fileID: 1313431383}
+  - component: {fileID: 1313431385}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1171,12 +1172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6323eff7644b584abc69bad0db5d7c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unwalkableMasks:
-  - serializedVersion: 2
-    m_Bits: 512
   gridSize: {x: 40, y: 40}
-  gridOriginPosition: {x: 0, y: -1, z: 0}
-  walkableCheckRadius: 0.5
 --- !u!114 &1313431384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1191,6 +1187,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceTransform: {fileID: 96365285}
   storageTransform: {fileID: 1676709339}
+--- !u!114 &1313431385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313431381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1155dfa8c383e2428928fd737e83a76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityTypes:
+  - entityName: Test AI
+    entityArchetypeEnum: 0
+    entityMesh: {fileID: -5537791886734953663, guid: c5ae97a63570141418c6dacac421fa51,
+      type: 3}
+    entityMaterial: {fileID: 2100000, guid: df17137a6a5f800409eaa20f453f3d97, type: 2}
+    entityShadowCastingMode: 1
 --- !u!1 &1371903169
 GameObject:
   m_ObjectHideFlags: 0
