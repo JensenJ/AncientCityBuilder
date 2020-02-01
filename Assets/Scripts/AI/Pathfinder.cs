@@ -1,15 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
 
-public class Pathfinder : MonoBehaviour
+public class Pathfinder
 {
+    //Const settings
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
+
+    private int gridWidth;
+    private int gridHeight;
+
+    public static Pathfinder Instance { get; private set; }
+
+    public Pathfinder(int width, int height)
+    {
+        Instance = this;
+        gridWidth = width;
+        gridHeight = height;
+    }
 
     public List<Vector3> GetPath(Vector3 startPosition, Vector3 endPosition)
     {
@@ -25,7 +37,13 @@ public class Pathfinder : MonoBehaviour
             path[i] = new int2(-1, -1);
         }
 
-        FindPathJob job = new FindPathJob { startPosition = startPos, endPosition = endPos, finalPath = path };
+        FindPathJob job = new FindPathJob
+        {
+            startPosition = startPos,
+            endPosition = endPos,
+            gridSize = new int2(gridWidth, gridHeight),
+            finalPath = path 
+        };
         JobHandle handle = job.Schedule();
         handle.Complete();
 
@@ -50,13 +68,14 @@ public class Pathfinder : MonoBehaviour
     {
         public int2 startPosition;
         public int2 endPosition;
+        public int2 gridSize;
         public NativeArray<int2> finalPath;
 
         public void Execute()
         {
-            int2 gridSize = new int2(40, 40);
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
+            //Grid initialisation
             for (int x = 0; x < gridSize.x; x++)
             {
                 for (int y = 0; y < gridSize.y; y++)
