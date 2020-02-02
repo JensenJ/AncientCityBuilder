@@ -762,9 +762,9 @@ GameObject:
   - component: {fileID: 1133473661}
   - component: {fileID: 1133473664}
   - component: {fileID: 1133473663}
+  - component: {fileID: 1133473667}
   - component: {fileID: 1133473662}
   - component: {fileID: 1133473665}
-  - component: {fileID: 1133473666}
   m_Layer: 0
   m_Name: AI
   m_TagString: Untagged
@@ -786,20 +786,18 @@ Transform:
   m_Father: {fileID: 992325598}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: -79.43}
---- !u!64 &1133473662
-MeshCollider:
+--- !u!114 &1133473662
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133473660}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: -5537791886734953663, guid: c5ae97a63570141418c6dacac421fa51, type: 3}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b13951e8bb252e44eac0dfece5b369b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &1133473663
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -856,16 +854,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1133473660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b04414a74fdfb2240a621aed7caedc00, type: 3}
+  m_Script: {fileID: 11500000, guid: 4614c96371d781f4199dc1efbabeb3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aiGrid: {fileID: 1313431383}
-  unitSpeed: 4
-  targetPos: {x: 0, y: 0, z: 0}
-  movementStopDist: 0.5
-  hasCompletedCurrentTask: 1
-  inventoryAmount: 0
---- !u!114 &1133473666
+  pathIndex: -1
+--- !u!114 &1133473667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -874,9 +867,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1133473660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad079ab865c1f7e42acc7cae8e43297c, type: 3}
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ConversionMode: 0
 --- !u!1 &1155834409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,7 +1132,6 @@ GameObject:
   - component: {fileID: 1313431382}
   - component: {fileID: 1313431384}
   - component: {fileID: 1313431383}
-  - component: {fileID: 1313431385}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1187,25 +1180,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceTransform: {fileID: 96365285}
   storageTransform: {fileID: 1676709339}
---- !u!114 &1313431385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1313431381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1155dfa8c383e2428928fd737e83a76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityTypes:
-  - entityName: Test AI
-    entityArchetypeEnum: 0
-    entityMesh: {fileID: -5537791886734953663, guid: c5ae97a63570141418c6dacac421fa51,
-      type: 3}
-    entityMaterial: {fileID: 2100000, guid: df17137a6a5f800409eaa20f453f3d97, type: 2}
-    entityShadowCastingMode: 1
 --- !u!1 &1371903169
 GameObject:
   m_ObjectHideFlags: 0

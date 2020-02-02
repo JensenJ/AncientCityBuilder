@@ -9,7 +9,7 @@ public class AIGrid : MonoBehaviour
 
     private void Awake()
     {
-        pathfinding = new Pathfinder(gridSize.x, gridSize.y);
+        //pathfinding = new Pathfinder(gridSize.x, gridSize.y);
     }
 
     private void Update()
@@ -20,16 +20,17 @@ public class AIGrid : MonoBehaviour
     //Function to get the path based on the current position passed in and the target location
     public List<Vector3> GetPath(Vector3 currentPos, Vector3 targetLocation)
     {
-        List<Vector3> path = pathfinding.GetPath(currentPos, targetLocation);
+        //List<Vector3> path = pathfinding.GetPath(currentPos, targetLocation);
 
-        if(path != null)
-        {
-            return path;
-        }
-        else
-        {
-            return null;
-        }
+        //if(path != null)
+        //{
+        //    return path;
+        //}
+        //else
+        //{
+        //    return null;
+        //}
 
+        return null;
     }
 }

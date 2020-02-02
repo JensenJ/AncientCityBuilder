@@ -4,62 +4,35 @@ using Unity.Mathematics;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
+using Unity.Entities;
 
-public class Pathfinder
+public class Pathfinder : ComponentSystem
 {
     //Const settings
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-    private int gridWidth;
-    private int gridHeight;
+    private int gridWidth = 40;
+    private int gridHeight = 40;
 
-    public static Pathfinder Instance { get; private set; }
-
-    public Pathfinder(int width, int height)
+    protected override void OnUpdate()
     {
-        Instance = this;
-        gridWidth = width;
-        gridHeight = height;
-    }
-
-    public List<Vector3> GetPath(Vector3 startPosition, Vector3 endPosition)
-    {
-        //Vectors to int2
-        int2 startPos = new int2((int)startPosition.x, (int)startPosition.z);
-        int2 endPos = new int2((int)endPosition.x, (int)endPosition.z);
-
-        //Job execution
-        NativeArray<int2> path = new NativeArray<int2>(256, Allocator.TempJob);
-        //Set default values for path
-        for (int i = 0; i < path.Length; i++)
+        Entities.ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingComponentData pathfindingComponentData) =>
         {
-            path[i] = new int2(-1, -1);
-        }
+            Debug.Log("Finding Path");
 
-        FindPathJob job = new FindPathJob
-        {
-            startPosition = startPos,
-            endPosition = endPos,
-            gridSize = new int2(gridWidth, gridHeight),
-            finalPath = path 
-        };
-        JobHandle handle = job.Schedule();
-        handle.Complete();
-
-        //Convert to vector3 list
-        List<Vector3> vectorPath = new List<Vector3>();
-        for (int i = 0; i < path.Length; i++)
-        {
-            if(path[i].x != -1 && path[i].y != -1)
+            FindPathJob findPathJob = new FindPathJob
             {
-                vectorPath.Add(new Vector3(path[i].x, 0, path[i].y));
-            }
-        }
-
-        path.Dispose();
-        vectorPath.Reverse();
-        return vectorPath;
+                startPosition = pathfindingComponentData.startPosition,
+                endPosition = pathfindingComponentData.endPosition,
+                gridSize = new int2(gridWidth, gridHeight),
+                pathPositionBuffer = pathPositionBuffer,
+                entity = entity,
+                pathFollowComponentDataFromEntity = GetComponentDataFromEntity<PathFollowComponent>()
+            };
+            findPathJob.Run();
+            PostUpdateCommands.RemoveComponent<PathfindingComponentData>(entity);
+        });
     }
 
     //Job to find path
@@ -69,7 +42,10 @@ public class Pathfinder
         public int2 startPosition;
         public int2 endPosition;
         public int2 gridSize;
-        public NativeArray<int2> finalPath;
+
+        public Entity entity;
+        public ComponentDataFromEntity<PathFollowComponent> pathFollowComponentDataFromEntity;
+        public DynamicBuffer<PathPosition> pathPositionBuffer;
 
         public void Execute()
         {
@@ -183,23 +159,18 @@ public class Pathfinder
                 }
             }
 
+            pathPositionBuffer.Clear();
             PathNode endNode = pathNodeArray[endNodeIndex];
             if (endNode.cameFromNodeIndex == -1)
             {
                 //Did not find path
+                pathFollowComponentDataFromEntity[entity] = new PathFollowComponent { pathIndex = -1 };
             }
             else
             {
                 //found path
-                NativeList<int2> path = CalculatePath(pathNodeArray, endNode);
-
-                for (int i = 0; i < path.Length; i++)
-                {
-                    
-                    finalPath[i] = path[i];
-                }
-
-                path.Dispose();
+                CalculatePath(pathNodeArray, endNode, pathPositionBuffer);
+                pathFollowComponentDataFromEntity[entity] = new PathFollowComponent { pathIndex = pathPositionBuffer.Length -1 };
             }
 
             //Array cleanup
@@ -232,6 +203,27 @@ public class Pathfinder
                 }
 
                 return path;
+            }
+        }
+
+        private void CalculatePath(NativeArray<PathNode> pathNodeArray, PathNode endNode, DynamicBuffer<PathPosition> pathPositionBuffer)
+        {
+            if (endNode.cameFromNodeIndex == -1)
+            {
+                //Couldn't find path
+            }
+            else
+            {
+                pathPositionBuffer.Add(new PathPosition { position = new int2(endNode.x, endNode.y) });
+
+                PathNode currentNode = endNode;
+                //Trace back path
+                while (currentNode.cameFromNodeIndex != -1)
+                {
+                    PathNode cameFromNode = pathNodeArray[currentNode.cameFromNodeIndex];
+                    pathPositionBuffer.Add(new PathPosition { position = new int2(cameFromNode.x, cameFromNode.y) });
+                    currentNode = cameFromNode;
+                }
             }
         }
 
