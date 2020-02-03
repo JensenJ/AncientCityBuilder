@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class AIGrid : MonoBehaviour
 {
-    private Pathfinder pathfinding;
-    [SerializeField] Vector2Int gridSize = new Vector2Int();
+    public static AIGrid Instance { private set; get; }
+
+    public GridSystem<GridNode> pathfindingGrid;
 
     private void Awake()
     {
-        //pathfinding = new Pathfinder(gridSize.x, gridSize.y);
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        pathfindingGrid = new GridSystem<GridNode>(30, 15, 1f, Vector3.zero, (GridSystem<GridNode> Grid, int x, int y) => new GridNode(pathfindingGrid, x, y), true);
+        pathfindingGrid.GetGridObject(2, 0).SetIsWalkable(false);
     }
 
     private void Update()
