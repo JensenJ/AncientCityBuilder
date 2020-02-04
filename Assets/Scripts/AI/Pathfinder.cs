@@ -2,6 +2,7 @@
 using UnityEngine;
 using Unity.Mathematics;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Burst;
 using Unity.Entities;
@@ -14,12 +15,12 @@ public class Pathfinder : ComponentSystem
 
     protected override void OnUpdate()
     {
+        int gridWidth = AIGrid.Instance.pathfindingGrid.GetWidth();
+        int gridHeight = AIGrid.Instance.pathfindingGrid.GetHeight();
+        List<FindPathJob> findPathJobList = new List<FindPathJob>();
+        NativeList<JobHandle> jobHandleList = new NativeList<JobHandle>(Allocator.Temp);
         Entities.ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingComponentData pathfindingComponentData) =>
         {
-            Debug.Log("Finding Path");
-
-            int gridWidth = AIGrid.Instance.pathfindingGrid.GetWidth();
-            int gridHeight = AIGrid.Instance.pathfindingGrid.GetHeight();
 
             FindPathJob findPathJob = new FindPathJob
             {
@@ -27,13 +28,28 @@ public class Pathfinder : ComponentSystem
                 startPosition = pathfindingComponentData.startPosition,
                 endPosition = pathfindingComponentData.endPosition,
                 gridSize = new int2(gridWidth, gridHeight),
-                pathPositionBuffer = pathPositionBuffer,
+                //pathPositionBuffer = pathPositionBuffer,
                 entity = entity,
                 pathFollowComponentDataFromEntity = GetComponentDataFromEntity<PathFollowComponent>()
             };
-            findPathJob.Run();
+            findPathJobList.Add(findPathJob);
+            jobHandleList.Add(findPathJob.Schedule());
             PostUpdateCommands.RemoveComponent<PathfindingComponentData>(entity);
         });
+        JobHandle.CompleteAll(jobHandleList);
+
+        foreach (FindPathJob job in findPathJobList)
+        {
+            new SetBufferPathJob
+            {
+                entity = job.entity,
+                gridSize = job.gridSize,
+                pathNodeArray = job.pathNodeArray,
+                pathfindingComponentDataFromEntity = GetComponentDataFromEntity<PathfindingComponentData>(),
+                pathFollowComponentDataFromEntity = GetComponentDataFromEntity<PathFollowComponent>(),
+                pathPositionBufferFromEntity = GetBufferFromEntity<PathPosition>(),
+            }.Run();
+        }
     }
 
     private NativeArray<PathNode> GetPathNodeArray()
@@ -63,6 +79,40 @@ public class Pathfinder : ComponentSystem
         return pathNodeArray;
     }
 
+    [BurstCompile]
+    private struct SetBufferPathJob : IJob
+    {
+        public int2 gridSize;
+        [DeallocateOnJobCompletion]
+        public NativeArray<PathNode> pathNodeArray;
+
+        public Entity entity;
+
+        public ComponentDataFromEntity<PathfindingComponentData> pathfindingComponentDataFromEntity;
+        public ComponentDataFromEntity<PathFollowComponent> pathFollowComponentDataFromEntity;
+        public BufferFromEntity<PathPosition> pathPositionBufferFromEntity;
+
+        public void Execute()
+        {
+            DynamicBuffer<PathPosition> pathPositionBuffer = pathPositionBufferFromEntity[entity];
+            pathPositionBuffer.Clear();
+
+            PathfindingComponentData pathfindingComponentData = pathfindingComponentDataFromEntity[entity];
+            int endNodeIndex = CalculateIndex(pathfindingComponentData.endPosition.x, pathfindingComponentData.endPosition.y, gridSize.x);
+            PathNode endNode = pathNodeArray[endNodeIndex];
+            if(endNode.cameFromNodeIndex == -1)
+            {
+                //Did not find path
+                pathFollowComponentDataFromEntity[entity] = new PathFollowComponent { pathIndex = -1 };
+            }
+            else
+            {
+                CalculatePath(pathNodeArray, endNode, pathPositionBuffer);
+                pathFollowComponentDataFromEntity[entity] = new PathFollowComponent { pathIndex = pathPositionBuffer.Length -1};
+            }
+        }
+    }
+
     //Job to find path
     [BurstCompile]
     private struct FindPathJob : IJob
@@ -70,12 +120,12 @@ public class Pathfinder : ComponentSystem
         public int2 startPosition;
         public int2 endPosition;
         public int2 gridSize;
-        [DeallocateOnJobCompletion]
         public NativeArray<PathNode> pathNodeArray;
 
         public Entity entity;
+        [NativeDisableContainerSafetyRestriction]
         public ComponentDataFromEntity<PathFollowComponent> pathFollowComponentDataFromEntity;
-        public DynamicBuffer<PathPosition> pathPositionBuffer;
+
 
         public void Execute()
         {
@@ -173,20 +223,6 @@ public class Pathfinder : ComponentSystem
                         }
                     }
                 }
-            }
-
-            pathPositionBuffer.Clear();
-            PathNode endNode = pathNodeArray[endNodeIndex];
-            if (endNode.cameFromNodeIndex == -1)
-            {
-                //Did not find path
-                pathFollowComponentDataFromEntity[entity] = new PathFollowComponent { pathIndex = -1 };
-            }
-            else
-            {
-                //found path
-                CalculatePath(pathNodeArray, endNode, pathPositionBuffer);
-                pathFollowComponentDataFromEntity[entity] = new PathFollowComponent { pathIndex = pathPositionBuffer.Length -1 };
             }
 
             //Array cleanup
