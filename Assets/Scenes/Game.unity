@@ -931,7 +931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   convertedEntityHolder: {fileID: 237660133}
   aiGrid: {fileID: 1313431383}
-  unitSpeed: 2
+  unitSpeed: 0
   movementStopDist: 0.1
   hasCompletedCurrentTask: 1
   inventoryAmount: 0
@@ -1241,6 +1241,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6323eff7644b584abc69bad0db5d7c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridSize: {x: 30, y: 30}
+  cellSize: 1
+  debugMode: 1
+  debugTextHeight: 0.1
 --- !u!114 &1313431384
 MonoBehaviour:
   m_ObjectHideFlags: 0

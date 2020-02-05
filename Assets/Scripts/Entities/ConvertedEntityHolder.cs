@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
+//Reference for converted entities from gameobjects
 public class ConvertedEntityHolder : MonoBehaviour, IConvertGameObjectToEntity
 {
     private Entity entity;
@@ -14,6 +15,7 @@ public class ConvertedEntityHolder : MonoBehaviour, IConvertGameObjectToEntity
         this.entityManager = dstManager;
     }
 
+    //Getters
     public Entity GetEntity()
     {
         return entity;

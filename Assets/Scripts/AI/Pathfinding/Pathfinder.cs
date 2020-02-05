@@ -15,13 +15,16 @@ public class Pathfinder : ComponentSystem
 
     protected override void OnUpdate()
     {
+        //Setup grid
         int gridWidth = AIGrid.Instance.pathfindingGrid.GetWidth();
         int gridHeight = AIGrid.Instance.pathfindingGrid.GetHeight();
         List<FindPathJob> findPathJobList = new List<FindPathJob>();
         NativeList<JobHandle> jobHandleList = new NativeList<JobHandle>(Allocator.Temp);
+        //For every entity with pathfinding data
         Entities.ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref PathfindingComponentData pathfindingComponentData) =>
         {
 
+            //Create pathfinding job
             FindPathJob findPathJob = new FindPathJob
             {
                 pathNodeArray = GetPathNodeArray(),
@@ -36,8 +39,10 @@ public class Pathfinder : ComponentSystem
             jobHandleList.Add(findPathJob.Schedule());
             PostUpdateCommands.RemoveComponent<PathfindingComponentData>(entity);
         });
+        //Complete all jobs
         JobHandle.CompleteAll(jobHandleList);
 
+        //Buffer path job for each entity
         foreach (FindPathJob job in findPathJobList)
         {
             new SetBufferPathJob
@@ -50,9 +55,11 @@ public class Pathfinder : ComponentSystem
                 pathPositionBufferFromEntity = GetBufferFromEntity<PathPosition>(),
             }.Run();
         }
+        //Dispose of array
         jobHandleList.Dispose();
     }
 
+    //Function to return array of pathnode
     private NativeArray<PathNode> GetPathNodeArray()
     {
         GridSystem<GridNode> grid = AIGrid.Instance.pathfindingGrid;
@@ -80,6 +87,7 @@ public class Pathfinder : ComponentSystem
         return pathNodeArray;
     }
 
+    //Burst compiled job for working out path position buffers
     [BurstCompile]
     private struct SetBufferPathJob : IJob
     {
@@ -93,6 +101,7 @@ public class Pathfinder : ComponentSystem
         public ComponentDataFromEntity<PathFollowComponent> pathFollowComponentDataFromEntity;
         public BufferFromEntity<PathPosition> pathPositionBufferFromEntity;
 
+        //Set path indexes
         public void Execute()
         {
             DynamicBuffer<PathPosition> pathPositionBuffer = pathPositionBufferFromEntity[entity];
@@ -128,6 +137,7 @@ public class Pathfinder : ComponentSystem
         public ComponentDataFromEntity<PathFollowComponent> pathFollowComponentDataFromEntity;
 
 
+        //Execute
         public void Execute()
         {
             for (int i = 0; i < pathNodeArray.Length; i++)
@@ -230,32 +240,6 @@ public class Pathfinder : ComponentSystem
             openList.Dispose();
             closedList.Dispose();
             neighbourOffsetArray.Dispose();
-        }
-    }
-
-    //Calculates the path
-    private static NativeList<int2> CalculatePath(NativeArray<PathNode> pathNodeArray, PathNode endNode)
-    {
-        if (endNode.cameFromNodeIndex == -1)
-        {
-            //Couldn't find path
-            return new NativeList<int2>(Allocator.Temp);
-        }
-        else
-        {
-            NativeList<int2> path = new NativeList<int2>(Allocator.Temp);
-            path.Add(new int2(endNode.x, endNode.y));
-
-            PathNode currentNode = endNode;
-            //Trace back path
-            while (currentNode.cameFromNodeIndex != -1)
-            {
-                PathNode cameFromNode = pathNodeArray[currentNode.cameFromNodeIndex];
-                path.Add(new int2(cameFromNode.x, cameFromNode.y));
-                currentNode = cameFromNode;
-            }
-
-            return path;
         }
     }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using Unity.Entities;
@@ -8,18 +6,17 @@ using Unity.Entities;
 [RequireComponent(typeof(SelectableObject))]
 public class AIUnit : MonoBehaviour
 {
-    [SerializeField] private ConvertedEntityHolder convertedEntityHolder;
+    //Entity reference
+    [SerializeField] private ConvertedEntityHolder convertedEntityHolder = null;
 
     [SerializeField] AIGrid aiGrid = null;
     [SerializeField] public float unitSpeed = 1.0f;
     [SerializeField] float movementStopDist = 0.1f;
-    [SerializeField] float gridCellSize = 1.0f;
 
     Action nextTask = delegate { };
     [SerializeField] bool hasCompletedCurrentTask = true;
 
-    List<Vector3> currentPath = null;
-    int currentPathIndex = 0;
+    float gridCellSize = 1.0f;
 
     void Awake()
     {
@@ -28,6 +25,7 @@ public class AIUnit : MonoBehaviour
     
     protected void CreateEvents()
     {
+        //Create on object selected event
         SelectableObject.OnObjectSelected += delegate (object sender, EventArgs e)
         {
             SelectUnit();
@@ -38,7 +36,6 @@ public class AIUnit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(convertedEntityHolder.GetEntity());
         //If hasnt been assigned
         if(aiGrid == null)
         {
@@ -49,6 +46,10 @@ public class AIUnit : MonoBehaviour
             {
                 //Log error
                 Debug.LogError("AI grid has not been assigned or could not be found, there can only be one grid in a scene.");
+            }
+            else
+            {
+                gridCellSize = AIGrid.Instance.pathfindingGrid.GetCellSize();
             }
         }
     }
@@ -68,32 +69,42 @@ public class AIUnit : MonoBehaviour
         PathFollowComponent pathFollow = entityManager.GetComponentData<PathFollowComponent>(entity);
         DynamicBuffer<PathPosition> pathPositionBuffer = entityManager.GetBuffer<PathPosition>(entity);
 
-        Debug.Log(pathFollow.pathIndex);
+        //If still following path
         if(pathFollow.pathIndex >= 0)
         {
+            //Get path position
             PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
 
+            //Get world position for each node
             float3 targetPosition = new float3(pathPosition.position.x, 0, pathPosition.position.y) + new float3(gridCellSize, 0, gridCellSize) * 0.5f;
+            //Calculate move direction
             float3 moveDir = math.normalizesafe(targetPosition - (float3)transform.position);
 
-            transform.position += (Vector3)(moveDir * 10f * Time.deltaTime);
-            if (math.distance(transform.position, targetPosition) < 0.1f)
+            //Move the ai to the next node
+            transform.position += (Vector3)(moveDir * (3f + unitSpeed) * Time.deltaTime);
+            //Check if within radius of next node
+            if (math.distance(transform.position, targetPosition) < movementStopDist)
             {
+                //If reached destination
                 if(pathFollow.pathIndex == 0)
                 {
                     hasCompletedCurrentTask = true;
                 }
-                //Debug.Log(pathPosition.position.x + "   " + pathPosition.position.y);
+                //Next node
                 pathFollow.pathIndex--;
+                //Update pathfollow array
                 entityManager.SetComponentData(entity, pathFollow);
 
             }
         }
 
+        //If current task completed
         if (hasCompletedCurrentTask == true)
         {
+            //Null pointer check for next task
             if (nextTask != null)
             {
+                //Invoke next task
                 nextTask.Invoke();
                 nextTask = null;
             }
@@ -116,16 +127,17 @@ public class AIUnit : MonoBehaviour
 
     }
 
+    //Function to move to a certain position, and then set the next task
     public void MoveTo(Vector3 position, float stoppingDistance, Action onArrivedAtPosition)
     {
         Debug.Log("Moving to" + position);
-
         SetTargetPosition(position);
         movementStopDist = stoppingDistance;
         hasCompletedCurrentTask = false;
         nextTask = onArrivedAtPosition;
     }
 
+    //Getter for whether the ai has finished its current task
     public bool IsIdle()
     {
         return hasCompletedCurrentTask;
