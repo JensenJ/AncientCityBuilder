@@ -22,15 +22,17 @@ public class GridSystem<TGridObject>
     private TGridObject[,] gridArray;
 
     private bool showDebug;
+    private float debugHeight;
 
     //Constructor
-    public GridSystem(int width, int height, float cellSize, Vector3 originPosition, Func<GridSystem<TGridObject>, int, int, TGridObject> createGridObject, bool showDebug)
+    public GridSystem(int width, int height, float cellSize, Vector3 originPosition, Func<GridSystem<TGridObject>, int, int, TGridObject> createGridObject, bool showDebug, float debugHeight)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
         this.originPosition = originPosition;
         this.showDebug = showDebug;
+        this.debugHeight = debugHeight;
 
         gridArray = new TGridObject[width, height];
 
@@ -43,7 +45,7 @@ public class GridSystem<TGridObject>
         }
 
         //Debug mode
-        if (showDebug)
+        if (showDebug == true)
         {
             //Create text
             TextMeshPro[,] debugTextArray = new TextMeshPro[width, height];
@@ -120,7 +122,7 @@ public class GridSystem<TGridObject>
     //Get world position from grid
     private Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, 1.1f, y) * cellSize + originPosition;
+        return new Vector3(x, debugHeight, y) * cellSize + originPosition;
     }
     //Get XY value from world position
     public void GetXY(Vector3 worldPosition, out int x, out int y)

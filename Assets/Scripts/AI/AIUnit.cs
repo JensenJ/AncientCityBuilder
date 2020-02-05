@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using Unity.Entities;
 
 [RequireComponent(typeof(SelectableObject))]
 public class AIUnit : MonoBehaviour
 {
+    [SerializeField] private ConvertedEntityHolder convertedEntityHolder;
 
     [SerializeField] AIGrid aiGrid = null;
     [SerializeField] public float unitSpeed = 1.0f;
-    [SerializeField] Vector3 targetPos;
-    [SerializeField] float movementStopDist = 0.5f;
+    [SerializeField] float movementStopDist = 0.1f;
+    [SerializeField] float gridCellSize = 1.0f;
 
     Action nextTask = delegate { };
     [SerializeField] bool hasCompletedCurrentTask = true;
@@ -21,7 +23,6 @@ public class AIUnit : MonoBehaviour
 
     void Awake()
     {
-        targetPos = transform.position;
         CreateEvents();
     }
     
@@ -37,6 +38,7 @@ public class AIUnit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(convertedEntityHolder.GetEntity());
         //If hasnt been assigned
         if(aiGrid == null)
         {
@@ -59,75 +61,65 @@ public class AIUnit : MonoBehaviour
     //Function for moving
     protected void Move()
     {
-        //If there is a path
-        if(currentPath != null)
-        {
-            //Get target pos
-            Vector3 targetPos = currentPath[currentPathIndex];
-            //If within a certain range of next node
-            if (Vector3.Distance(transform.position, targetPos) > movementStopDist)
-            {
-                //Actual transformation
-                Vector3 moveDir = (targetPos - transform.position).normalized;
-                transform.position = transform.position + moveDir * unitSpeed * Time.deltaTime;
-            }
-            else
-            {
-                //arrived at destination (each node), increment path index
-                currentPathIndex++;
+        //Entity data getting
+        Entity entity = convertedEntityHolder.GetEntity();
+        EntityManager entityManager = convertedEntityHolder.GetEntityManager();
 
-                //If at final node, stop moving
-                if (currentPathIndex >= currentPath.Count)
+        PathFollowComponent pathFollow = entityManager.GetComponentData<PathFollowComponent>(entity);
+        DynamicBuffer<PathPosition> pathPositionBuffer = entityManager.GetBuffer<PathPosition>(entity);
+
+        Debug.Log(pathFollow.pathIndex);
+        if(pathFollow.pathIndex >= 0)
+        {
+            PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
+
+            float3 targetPosition = new float3(pathPosition.position.x, 0, pathPosition.position.y) + new float3(gridCellSize, 0, gridCellSize) * 0.5f;
+            float3 moveDir = math.normalizesafe(targetPosition - (float3)transform.position);
+
+            transform.position += (Vector3)(moveDir * 10f * Time.deltaTime);
+            if (math.distance(transform.position, targetPosition) < 0.1f)
+            {
+                if(pathFollow.pathIndex == 0)
                 {
-                    StopMoving();
                     hasCompletedCurrentTask = true;
                 }
-            }
+                //Debug.Log(pathPosition.position.x + "   " + pathPosition.position.y);
+                pathFollow.pathIndex--;
+                entityManager.SetComponentData(entity, pathFollow);
 
-            if (hasCompletedCurrentTask == true)
+            }
+        }
+
+        if (hasCompletedCurrentTask == true)
+        {
+            if (nextTask != null)
             {
-                if (nextTask != null)
-                {
-                    nextTask.Invoke();
-                    nextTask = null;
-                }
+                nextTask.Invoke();
+                nextTask = null;
             }
         }
     }
 
-    //Function to stop moving
-    public void StopMoving()
+    //Function to set new target position
+    private void SetTargetPosition(Vector3 position)
     {
-        currentPath = null;
-    }
+        //Entity data getting
+        Entity entity = convertedEntityHolder.GetEntity();
+        EntityManager entityManager = convertedEntityHolder.GetEntityManager();
 
-    //Sets the target position for movement.
-    public void SetTargetPosition(Vector3 target)
-    {
-        currentPathIndex = 0;
-        currentPath = aiGrid.GetPath(transform.position, target);
-
-        for (int i = 0; i < currentPath.Count; i++)
+        //Setting new path data
+        entityManager.AddComponentData(entity, new PathfindingComponentData
         {
-            Debug.Log(currentPath[i]);
-        }
+            startPosition = new int2((int)transform.position.x, (int)transform.position.z),
+            endPosition = new int2((int)position.x, (int)position.z)
+        });
 
-        if(currentPath != null && currentPath.Count > 1)
-        {
-            currentPath.RemoveAt(0);
-        }
-
-        if(currentPath == null)
-        {
-            Debug.Log("Path not found");
-            targetPos = transform.position;
-        }
     }
 
     public void MoveTo(Vector3 position, float stoppingDistance, Action onArrivedAtPosition)
     {
         Debug.Log("Moving to" + position);
-        targetPos = position;
+
         SetTargetPosition(position);
         movementStopDist = stoppingDistance;
         hasCompletedCurrentTask = false;
