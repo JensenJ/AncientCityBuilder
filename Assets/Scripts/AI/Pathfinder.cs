@@ -50,6 +50,7 @@ public class Pathfinder : ComponentSystem
                 pathPositionBufferFromEntity = GetBufferFromEntity<PathPosition>(),
             }.Run();
         }
+        jobHandleList.Dispose();
     }
 
     private NativeArray<PathNode> GetPathNodeArray()
