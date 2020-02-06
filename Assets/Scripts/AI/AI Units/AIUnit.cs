@@ -56,7 +56,7 @@ public class AIUnit : MonoBehaviour
 
     public void SelectUnit()
     {
-        RTSCameraController.instance.followTransform = SelectableObject.GetSelectedObject();
+        RTSCameraController.instance.selectTransform = SelectableObject.GetSelectedObject();
     }
 
     //Function for moving

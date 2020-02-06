@@ -10,7 +10,7 @@ public class RTSCameraController : MonoBehaviour
 
     //Transform references
     public Transform cameraTransform;
-    public Transform followTransform;
+    public Transform selectTransform;
 
     //Control variables
     [SerializeField] bool canMove = true;
@@ -46,10 +46,10 @@ public class RTSCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(followTransform != null && isFollowingObject == true)
+        if(selectTransform != null && isFollowingObject == true)
         {
             //Set position to AI but allow rotation and zoom
-            newPosition = followTransform.position;
+            newPosition = selectTransform.position;
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
             RotateCamera();
             ZoomCamera();
@@ -62,11 +62,25 @@ public class RTSCameraController : MonoBehaviour
             ZoomCamera();
         }
 
-        //Print mouseclick position
-        if (Input.GetMouseButtonDown(0))
+        //Move Order system
+        if (selectTransform != null && Input.GetMouseButtonDown(1))
         {
+            //Get mouse position
             RaycastHit hit = Utils.GetMousePositionClickData(Camera.main);
             print(hit.point);
+
+            //Get selected unit
+            AIUnit unit = selectTransform.GetComponent<AIUnit>();
+            if(unit != null)
+            {
+                //Move unit
+                unit.MoveTo(hit.point, 0.1f, null);
+            }
+            else
+            {
+                //Log error
+                Debug.LogError("Unit is null");
+            }
         }
 
         //Follow toggling
@@ -81,7 +95,7 @@ public class RTSCameraController : MonoBehaviour
         {
             //Stop following target
             isFollowingObject = false;
-            followTransform = null;
+            selectTransform = null;
         }
     }
 
