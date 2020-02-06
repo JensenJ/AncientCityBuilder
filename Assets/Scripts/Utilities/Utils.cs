@@ -30,4 +30,13 @@ public static class Utils
         textMesh.color = color;
         return textMesh;
     }
+
+    public static RaycastHit GetMousePositionClickData(Camera cam)
+    {
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        Physics.Raycast(ray, out hit);
+        return hit;
+    }
 }

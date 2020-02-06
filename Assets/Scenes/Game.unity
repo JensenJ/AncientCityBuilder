@@ -713,6 +713,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 294118097}
   followTransform: {fileID: 0}
   canMove: 1
+  isFollowingObject: 0
   fastSpeed: 3
   normalSpeed: 0.5
   movementTime: 5
@@ -846,6 +847,7 @@ GameObject:
   - component: {fileID: 1133473661}
   - component: {fileID: 1133473664}
   - component: {fileID: 1133473663}
+  - component: {fileID: 1133473662}
   - component: {fileID: 1133473667}
   - component: {fileID: 1133473666}
   m_Layer: 0
@@ -870,6 +872,20 @@ Transform:
   m_Father: {fileID: 992325598}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!64 &1133473662
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133473660}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5537791886734953663, guid: c5ae97a63570141418c6dacac421fa51, type: 3}
 --- !u!23 &1133473663
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1243,7 +1259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSize: {x: 30, y: 30}
   cellSize: 1
-  debugMode: 1
+  debugMode: 0
   debugTextHeight: 0.1
 --- !u!114 &1313431384
 MonoBehaviour:

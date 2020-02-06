@@ -14,6 +14,7 @@ public class RTSCameraController : MonoBehaviour
 
     //Control variables
     [SerializeField] bool canMove = true;
+    [SerializeField] bool isFollowingObject = false;
     [SerializeField] [Range(1.0f, 5.0f)] float fastSpeed = 3;
     [SerializeField] [Range(0.1f, 3.0f)] float normalSpeed = 0.5f;
     [SerializeField] [Range(1.0f, 20.0f)] float movementTime = 5;
@@ -45,7 +46,7 @@ public class RTSCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(followTransform != null)
+        if(followTransform != null && isFollowingObject == true)
         {
             //Set position to AI but allow rotation and zoom
             newPosition = followTransform.position;
@@ -61,9 +62,25 @@ public class RTSCameraController : MonoBehaviour
             ZoomCamera();
         }
 
+        //Print mouseclick position
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit = Utils.GetMousePositionClickData(Camera.main);
+            print(hit.point);
+        }
+
+        //Follow toggling
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            //Toggle follow mode
+            isFollowingObject = !isFollowingObject;
+        }
+
+        //Target following
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             //Stop following target
+            isFollowingObject = false;
             followTransform = null;
         }
     }
