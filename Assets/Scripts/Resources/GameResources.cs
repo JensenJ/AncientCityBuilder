@@ -15,6 +15,16 @@ public class GameResources
         OnGoldAmountChanged?.Invoke(null, EventArgs.Empty);
     }
 
+    public static void RemoveGoldAmount(int amount)
+    {
+        goldAmount -= amount;
+        if(goldAmount < 0)
+        {
+            goldAmount = 0;
+        }
+        OnGoldAmountChanged?.Invoke(null, EventArgs.Empty);
+    }
+
     public static int GetGoldAmount()
     {
         return goldAmount;

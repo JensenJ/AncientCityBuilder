@@ -19,7 +19,7 @@ public class ResourceNode
         }
         else
         {
-            resourceAmount = 10;
+            resourceAmount = 100;
         }
     }
 
