@@ -12,6 +12,7 @@ public class RTSBuildingSystem : MonoBehaviour
     private int selectedBuilding = 1;
     private int lastSelectedBuilding = 1;
     GameObject ghostBuilding = null;
+    private float snapGridSize = 1.0f;
 
     // Update is called once per frame
     void Update()
@@ -57,17 +58,45 @@ public class RTSBuildingSystem : MonoBehaviour
         {
             //Get mouse position and move object to mouse cursor
             RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main, layersToCheck);
-            ghostBuilding.transform.position = hit.point;
+            //Snap to grid
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                //Snap position
+                ghostBuilding.transform.position = new Vector3(
+                    Mathf.Round(hit.point.x / snapGridSize) + snapGridSize / 2, 
+                    Mathf.Round(hit.point.y / snapGridSize) + snapGridSize / 2, 
+                    Mathf.Round(hit.point.z / snapGridSize) + snapGridSize / 2);
+            }
+            else
+            {
+                //Don't snap to grid
+                ghostBuilding.transform.position = hit.point;
+            }
             
             //Resource cost check
             if (buildings[selectedBuilding - 1].goldCost <= GameResources.GetGoldAmount())
             {
                 ghostBuilding.GetComponent<MeshRenderer>().material = ghostValidMat;
+
                 //If user clicks to place object
                 if (Input.GetMouseButtonDown(0))
                 {
+                    //Spawn positioning / snapping
+                    Vector3 spawnPos;
+                    if (Input.GetKey(KeyCode.LeftControl)) 
+                    { 
+                        spawnPos = new Vector3(
+                            Mathf.Round(hit.point.x / snapGridSize) + snapGridSize / 2,
+                            Mathf.Round(hit.point.y / snapGridSize) + snapGridSize / 2,
+                            Mathf.Round(hit.point.z / snapGridSize) + snapGridSize / 2);
+                    }
+                    else
+                    {
+                        spawnPos = hit.point;
+                    }
+
                     //Create new object and remove gold from player resources
-                    Instantiate(buildings[selectedBuilding - 1].buildingPrefab, hit.point, Quaternion.identity);
+                    Instantiate(buildings[selectedBuilding - 1].buildingPrefab, spawnPos, Quaternion.identity);
                     GameResources.RemoveGoldAmount(buildings[selectedBuilding - 1].goldCost);
                     //Destroy ghost building if shift is not held down.
                     if (!Input.GetKey(KeyCode.LeftShift))

@@ -76,7 +76,7 @@ public class AIUnit : MonoBehaviour
             PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
 
             //Get world position for each node
-            float3 targetPosition = new float3(pathPosition.position.x, 0, pathPosition.position.y) + new float3(gridCellSize, 0, gridCellSize) * 0.5f;
+            float3 targetPosition = new float3(pathPosition.position.x, 0, pathPosition.position.y) + Vector3.one * new float3(gridCellSize, 0, gridCellSize) * 0.5f;
             //Calculate move direction
             float3 moveDir = math.normalizesafe(targetPosition - (float3)transform.position);
 
