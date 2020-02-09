@@ -5,17 +5,13 @@ using UnityEngine;
 public class RTSBuildingSystem : MonoBehaviour
 {
 
+    [SerializeField] Material ghostValidMat = null;
+    [SerializeField] Material ghostInvalidMat = null;
     [SerializeField] LayerMask layersToCheck = new LayerMask();
     [SerializeField] BuildingData[] buildings = null;
     private int selectedBuilding = 1;
     private int lastSelectedBuilding = 1;
     GameObject ghostBuilding = null;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -63,16 +59,32 @@ public class RTSBuildingSystem : MonoBehaviour
             RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main, layersToCheck);
             ghostBuilding.transform.position = hit.point;
             
-            //If user clicks to place object
-            if (Input.GetMouseButtonDown(0))
+            //Resource cost check
+            if (buildings[selectedBuilding - 1].goldCost <= GameResources.GetGoldAmount())
             {
-                //Resource cost check
-                if (buildings[selectedBuilding - 1].goldCost <= GameResources.GetGoldAmount())
+                ghostBuilding.GetComponent<MeshRenderer>().material = ghostValidMat;
+                //If user clicks to place object
+                if (Input.GetMouseButtonDown(0))
                 {
                     //Create new object and remove gold from player resources
                     Instantiate(buildings[selectedBuilding - 1].buildingPrefab, hit.point, Quaternion.identity);
                     GameResources.RemoveGoldAmount(buildings[selectedBuilding - 1].goldCost);
+                    //Destroy ghost building if shift is not held down.
+                    if (!Input.GetKey(KeyCode.LeftShift))
+                    {
+                        Destroy(ghostBuilding);
+                    }
                 }
+            }
+            else
+            {
+                ghostBuilding.GetComponent<MeshRenderer>().material = ghostInvalidMat;
+            }
+
+            //Destroy ghostbuilding if escape pressed.
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Destroy(ghostBuilding);
             }
         }
     }
