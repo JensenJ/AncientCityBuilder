@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2077318830103541533}
   - component: {fileID: 6974259766903183339}
   - component: {fileID: 3858458429209051916}
-  m_Layer: 0
-  m_Name: Cube
+  m_Layer: 9
+  m_Name: GoldMine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -62,26 +62,26 @@ public class RTSCameraController : MonoBehaviour
             ZoomCamera();
         }
 
-        //Move Order system
-        if (selectTransform != null && Input.GetMouseButtonDown(1))
-        {
-            //Get mouse position
-            RaycastHit hit = Utils.GetMousePositionClickData(Camera.main);
-            print(hit.point);
+        ////Move Order system
+        //if (selectTransform != null && Input.GetMouseButtonDown(1))
+        //{
+        //    //Get mouse position
+        //    RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main);
+        //    print(hit.point);
 
-            //Get selected unit
-            AIUnit unit = selectTransform.GetComponent<AIUnit>();
-            if(unit != null)
-            {
-                //Move unit
-                unit.MoveTo(hit.point, 0.1f, null);
-            }
-            else
-            {
-                //Log error
-                Debug.LogError("Unit is null");
-            }
-        }
+        //    //Get selected unit
+        //    AIUnit unit = selectTransform.GetComponent<AIUnit>();
+        //    if(unit != null)
+        //    {
+        //        //Move unit
+        //        unit.MoveTo(hit.point, 0.1f, null);
+        //    }
+        //    else
+        //    {
+        //        //Log error
+        //        Debug.LogError("Unit is null");
+        //    }
+        //}
 
         //Follow toggling
         if (Input.GetKeyDown(KeyCode.F))

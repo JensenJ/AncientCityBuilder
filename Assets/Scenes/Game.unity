@@ -781,6 +781,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0dd3a5edeb4b544fa789e751edad85f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layersToCheck:
+    serializedVersion: 2
+    m_Bits: 1024
   buildings:
   - buildingName: HQ
     buildingPrefab: {fileID: 8492937199792661651, guid: fffb81327d725b4449856f268e083379,
@@ -1190,7 +1193,7 @@ GameObject:
   - component: {fileID: 1211789352}
   - component: {fileID: 1211789351}
   - component: {fileID: 1211789350}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

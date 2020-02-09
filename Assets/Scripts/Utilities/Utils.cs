@@ -31,12 +31,12 @@ public static class Utils
         return textMesh;
     }
 
-    public static RaycastHit GetMousePositionClickData(Camera cam)
+    public static RaycastHit GetMousePositionRaycastData(Camera cam, LayerMask layerToCheck)
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        Physics.Raycast(ray, out hit);
+        Physics.Raycast(ray, out hit, Mathf.Infinity, layerToCheck);
         return hit;
     }
 }
