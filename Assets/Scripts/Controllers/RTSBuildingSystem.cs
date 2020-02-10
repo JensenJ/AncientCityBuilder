@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(RTSCameraController))]
 public class RTSBuildingSystem : MonoBehaviour
 {
-
     [SerializeField] Material ghostValidMat = null;
     [SerializeField] Material ghostInvalidMat = null;
     [SerializeField] LayerMask layersToCheck = new LayerMask();
     [SerializeField] BuildingData[] buildings = null;
-    private int selectedBuilding = 1;
-    private int lastSelectedBuilding = 1;
+    private int selectedBuilding = 0;
+    private int lastSelectedBuilding = 0;
     GameObject ghostBuilding = null;
     private float snapGridSize = 1.0f;
 
@@ -26,14 +26,14 @@ public class RTSBuildingSystem : MonoBehaviour
         {
             selectedBuilding = 1;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            selectedBuilding = 2;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            selectedBuilding = 3;
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    selectedBuilding = 2;
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    selectedBuilding = 3;
+        //}
 
         //Range check, checks selected building is valid ID
         if(selectedBuilding >= 1 && selectedBuilding < buildings.Length + 1)
@@ -72,6 +72,17 @@ public class RTSBuildingSystem : MonoBehaviour
                 //Don't snap to grid
                 ghostBuilding.transform.position = hit.point;
             }
+
+            //Rotating the building to be placed.
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                ghostBuilding.transform.Rotate(0, 45, 0);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                ghostBuilding.transform.Rotate(0, -45, 0);
+            }
             
             //Resource cost check
             if (buildings[selectedBuilding - 1].goldCost <= GameResources.GetGoldAmount())
@@ -81,27 +92,15 @@ public class RTSBuildingSystem : MonoBehaviour
                 //If user clicks to place object
                 if (Input.GetMouseButtonDown(0))
                 {
-                    //Spawn positioning / snapping
-                    Vector3 spawnPos;
-                    if (Input.GetKey(KeyCode.LeftControl)) 
-                    { 
-                        spawnPos = new Vector3(
-                            Mathf.Round(hit.point.x / snapGridSize) + snapGridSize / 2,
-                            Mathf.Round(hit.point.y / snapGridSize) + snapGridSize / 2,
-                            Mathf.Round(hit.point.z / snapGridSize) + snapGridSize / 2);
-                    }
-                    else
-                    {
-                        spawnPos = hit.point;
-                    }
-
                     //Create new object and remove gold from player resources
-                    Instantiate(buildings[selectedBuilding - 1].buildingPrefab, spawnPos, Quaternion.identity);
+                    Instantiate(buildings[selectedBuilding - 1].buildingPrefab, ghostBuilding.transform.position, ghostBuilding.transform.rotation);
                     GameResources.RemoveGoldAmount(buildings[selectedBuilding - 1].goldCost);
-                    //Destroy ghost building if shift is not held down.
+                    //Destroy ghost building if shift is not held down, also reset selection
                     if (!Input.GetKey(KeyCode.LeftShift))
                     {
                         Destroy(ghostBuilding);
+                        selectedBuilding = 0;
+                        lastSelectedBuilding = 0;
                     }
                 }
             }
@@ -110,10 +109,12 @@ public class RTSBuildingSystem : MonoBehaviour
                 ghostBuilding.transform.GetChild(0).GetComponent<MeshRenderer>().material = ghostInvalidMat;
             }
 
-            //Destroy ghostbuilding if escape pressed.
+            //Destroy ghostbuilding if escape pressed, reset selection.
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Destroy(ghostBuilding);
+                selectedBuilding = 0;
+                lastSelectedBuilding = 0;
             }
         }
     }

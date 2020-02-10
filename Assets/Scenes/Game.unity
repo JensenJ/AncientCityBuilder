@@ -790,7 +790,7 @@ MonoBehaviour:
   - buildingName: House
     buildingPrefab: {fileID: 5612945943587579356, guid: 965ba06ad68b8f24a96be0e10106fd6e,
       type: 3}
-    goldCost: 10
+    goldCost: 1
 --- !u!1 &567640355
 GameObject:
   m_ObjectHideFlags: 0

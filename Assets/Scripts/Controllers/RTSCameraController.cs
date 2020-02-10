@@ -14,6 +14,8 @@ public class RTSCameraController : MonoBehaviour
 
     //Control variables
     [SerializeField] bool canMove = true;
+    [SerializeField] bool canRotateWithKeyboard = false;
+    [SerializeField] bool canZoomWithKeyboard = false;
     [SerializeField] bool isFollowingObject = false;
     [SerializeField] [Range(1.0f, 5.0f)] float fastSpeed = 3;
     [SerializeField] [Range(0.1f, 3.0f)] float normalSpeed = 0.5f;
@@ -194,15 +196,18 @@ public class RTSCameraController : MonoBehaviour
                 newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / 5f));
             }
 
-            //Rotate Left
-            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Period))
+            if (canRotateWithKeyboard)
             {
-                newRotation *= Quaternion.Euler(Vector3.up * rotationAmount);
-            }
-            //Rotate right
-            if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Comma))
-            {
-                newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
+                //Rotate Left
+                if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Period))
+                {
+                    newRotation *= Quaternion.Euler(Vector3.up * rotationAmount);
+                }
+                //Rotate right
+                if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Comma))
+                {
+                    newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
+                }
             }
         }
         //Lerping
@@ -221,16 +226,19 @@ public class RTSCameraController : MonoBehaviour
                 newZoom += Input.mouseScrollDelta.y * zoomAmount;
             }
 
-            //Increase zoom
-            if (Input.GetKey(KeyCode.R))
+            if (canZoomWithKeyboard)
             {
-                newZoom += zoomAmount;
-            }
+                //Increase zoom
+                if (Input.GetKey(KeyCode.R))
+                {
+                    newZoom += zoomAmount;
+                }
 
-            //Decrease zoom
-            if (Input.GetKey(KeyCode.F))
-            {
-                newZoom -= zoomAmount;
+                //Decrease zoom
+                if (Input.GetKey(KeyCode.F))
+                {
+                    newZoom -= zoomAmount;
+                }
             }
 
             //Zoom clamping
