@@ -76,7 +76,7 @@ public class RTSBuildingSystem : MonoBehaviour
             //Resource cost check
             if (buildings[selectedBuilding - 1].goldCost <= GameResources.GetGoldAmount())
             {
-                ghostBuilding.GetComponent<MeshRenderer>().material = ghostValidMat;
+                ghostBuilding.transform.GetChild(0).GetComponent<MeshRenderer>().material = ghostValidMat;
 
                 //If user clicks to place object
                 if (Input.GetMouseButtonDown(0))
@@ -107,7 +107,7 @@ public class RTSBuildingSystem : MonoBehaviour
             }
             else
             {
-                ghostBuilding.GetComponent<MeshRenderer>().material = ghostInvalidMat;
+                ghostBuilding.transform.GetChild(0).GetComponent<MeshRenderer>().material = ghostInvalidMat;
             }
 
             //Destroy ghostbuilding if escape pressed.

@@ -787,18 +787,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   buildings:
-  - buildingName: HQ
-    buildingPrefab: {fileID: 8492937199792661651, guid: fffb81327d725b4449856f268e083379,
-      type: 3}
-    goldCost: 20
   - buildingName: House
     buildingPrefab: {fileID: 5612945943587579356, guid: 965ba06ad68b8f24a96be0e10106fd6e,
       type: 3}
     goldCost: 10
-  - buildingName: Gold Mine
-    buildingPrefab: {fileID: 6149940513257487945, guid: 1dc9eda0210341342971c6d3ed65fcdf,
-      type: 3}
-    goldCost: 5
 --- !u!1 &567640355
 GameObject:
   m_ObjectHideFlags: 0
