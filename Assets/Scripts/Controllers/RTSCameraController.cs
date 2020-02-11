@@ -10,13 +10,12 @@ public class RTSCameraController : MonoBehaviour
 
     //Transform references
     public Transform cameraTransform;
-    public Transform selectTransform;
+    public Transform followTransform;
 
     //Control variables
     [SerializeField] bool canMove = true;
     [SerializeField] bool canRotateWithKeyboard = false;
     [SerializeField] bool canZoomWithKeyboard = false;
-    [SerializeField] bool isFollowingObject = false;
     [SerializeField] [Range(1.0f, 5.0f)] float fastSpeed = 3;
     [SerializeField] [Range(0.1f, 3.0f)] float normalSpeed = 0.5f;
     [SerializeField] [Range(1.0f, 20.0f)] float movementTime = 5;
@@ -48,10 +47,10 @@ public class RTSCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(selectTransform != null && isFollowingObject == true)
+        if(followTransform != null)
         {
             //Set position to AI but allow rotation and zoom
-            newPosition = selectTransform.position;
+            newPosition = followTransform.position;
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
             RotateCamera();
             ZoomCamera();
@@ -62,42 +61,6 @@ public class RTSCameraController : MonoBehaviour
             PanCamera();
             RotateCamera();
             ZoomCamera();
-        }
-
-        ////Move Order system
-        //if (selectTransform != null && Input.GetMouseButtonDown(1))
-        //{
-        //    //Get mouse position
-        //    RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main);
-        //    print(hit.point);
-
-        //    //Get selected unit
-        //    AIUnit unit = selectTransform.GetComponent<AIUnit>();
-        //    if(unit != null)
-        //    {
-        //        //Move unit
-        //        unit.MoveTo(hit.point, 0.1f, null);
-        //    }
-        //    else
-        //    {
-        //        //Log error
-        //        Debug.LogError("Unit is null");
-        //    }
-        //}
-
-        //Follow toggling
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            //Toggle follow mode
-            isFollowingObject = !isFollowingObject;
-        }
-
-        //Target following
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            //Stop following target
-            isFollowingObject = false;
-            selectTransform = null;
         }
     }
 

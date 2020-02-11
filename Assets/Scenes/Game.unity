@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 237660133}
   - component: {fileID: 237660135}
   - component: {fileID: 237660134}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: UnitEntity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -724,6 +724,7 @@ GameObject:
   - component: {fileID: 552363011}
   - component: {fileID: 552363010}
   - component: {fileID: 552363012}
+  - component: {fileID: 552363013}
   m_Layer: 0
   m_Name: Camera Rig
   m_TagString: Untagged
@@ -744,9 +745,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 294118097}
-  selectTransform: {fileID: 0}
+  followTransform: {fileID: 0}
   canMove: 1
-  isFollowingObject: 0
+  canRotateWithKeyboard: 0
+  canZoomWithKeyboard: 0
   fastSpeed: 3
   normalSpeed: 0.5
   movementTime: 5
@@ -791,6 +793,25 @@ MonoBehaviour:
     buildingPrefab: {fileID: 5612945943587579356, guid: 965ba06ad68b8f24a96be0e10106fd6e,
       type: 3}
     goldCost: 1
+--- !u!114 &552363013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552363009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6822d8e1b57685d43b65e1d75e884040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectTransform: {fileID: 0}
+  selectionLayers:
+    serializedVersion: 2
+    m_Bits: 2560
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &567640355
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,9 +924,8 @@ GameObject:
   - component: {fileID: 1133473664}
   - component: {fileID: 1133473663}
   - component: {fileID: 1133473662}
-  - component: {fileID: 1133473667}
   - component: {fileID: 1133473666}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,18 +1026,6 @@ MonoBehaviour:
   movementStopDist: 0.1
   hasCompletedCurrentTask: 1
   inventoryAmount: 0
---- !u!114 &1133473667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1133473660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad079ab865c1f7e42acc7cae8e43297c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1155834409
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,8 +21,6 @@ public class AIGatherer : AIUnit
     private void Awake()
     {
         state = AIState.Idle;
-
-        CreateEvents();
     }
 
     private void Update()

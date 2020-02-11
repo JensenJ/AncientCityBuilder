@@ -5,6 +5,7 @@ using TMPro;
 
 public static class Utils
 {
+    //Function to create world text with default settings
     public static TextMeshPro CreateWorldText(string text, Transform parent = null, Vector3 localPosition = default(Vector3), 
         int fontsize = 40, Color? color = null, TextAlignmentOptions textAlignment = TextAlignmentOptions.Center)
     {
@@ -15,6 +16,7 @@ public static class Utils
         return CreateWorldText(parent, text, localPosition, fontsize, (Color)color, textAlignment);
     }
 
+    //Function to create world text where settings have to be defined.
     public static TextMeshPro CreateWorldText(Transform parent, string text, Vector3 localPosition,
         int fontsize, Color color, TextAlignmentOptions textAlignment)
     {
@@ -31,12 +33,11 @@ public static class Utils
         return textMesh;
     }
 
+    //Function to return the raycast hit data from the current mouse position, only on layers specified
     public static RaycastHit GetMousePositionRaycastData(Camera cam, LayerMask layerToCheck)
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        Physics.Raycast(ray, out hit, Mathf.Infinity, layerToCheck);
+        Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerToCheck);
         return hit;
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 using Unity.Mathematics;
 using Unity.Entities;
 
-[RequireComponent(typeof(SelectableObject))]
 public class AIUnit : MonoBehaviour
 {
     //Entity reference
@@ -17,22 +16,7 @@ public class AIUnit : MonoBehaviour
     [SerializeField] bool hasCompletedCurrentTask = true;
 
     float gridCellSize = 1.0f;
-
-    void Awake()
-    {
-        CreateEvents();
-    }
     
-    protected void CreateEvents()
-    {
-        //Create on object selected event
-        SelectableObject.OnObjectSelected += delegate (object sender, EventArgs e)
-        {
-            SelectUnit();
-        };
-
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -52,11 +36,6 @@ public class AIUnit : MonoBehaviour
                 gridCellSize = AIGrid.Instance.pathfindingGrid.GetCellSize();
             }
         }
-    }
-
-    public void SelectUnit()
-    {
-        RTSCameraController.instance.selectTransform = SelectableObject.GetSelectedObject();
     }
 
     //Function for moving
