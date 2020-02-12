@@ -138,8 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14344e6931477044ba74b959dd87f985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingHealth: 100
-  maxBuildingHealth: 100
   buildProgress: 0
-  hasBeenBuilt: 0
+  isBuilding: 0
   buildTime: 5
+  buildingHeight: 0
+  buildingHealth: 0
+  maxBuildingHealth: 100

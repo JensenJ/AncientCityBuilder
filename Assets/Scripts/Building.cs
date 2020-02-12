@@ -9,6 +9,8 @@ public class Building : MonoBehaviour
     [SerializeField] private float buildTime = 10.0f;
     [SerializeField] private float buildingHeight;
 
+    [SerializeField] private float buildingHealth = 0.0f;
+    [SerializeField] private float maxBuildingHealth = 100.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +31,9 @@ public class Building : MonoBehaviour
             Vector3 buildingPosition = transform.position;
             buildingPosition.y = 0.0f - ((1 - buildProgress) * buildingHeight);
 
+            //Setting building health
+            buildingHealth = buildProgress * maxBuildingHealth;
+
             //If build progress is 1
             if (buildProgress >= 1.0)
             {
@@ -36,6 +41,7 @@ public class Building : MonoBehaviour
                 isBuilding = false;
                 buildProgress = 1.0f;
                 buildingPosition.y = 0.0f;
+                buildingHealth = maxBuildingHealth;
             }
             //Update position
             transform.position = buildingPosition;
@@ -46,6 +52,33 @@ public class Building : MonoBehaviour
     public void StartBuilding()
     {
         isBuilding = true;
+    }
+
+    //Getters and Setters
+    public float GetBuildingHealth()
+    {
+        return buildingHealth;
+    }
+
+    public float GetMaxBuildingHealth()
+    {
+        return maxBuildingHealth;
+    }
+
+    public void SetBuildingHealth(float health)
+    {
+        buildingHealth = health;
+    }
+
+    //Function to damage building health
+    public void DamageBuilding(float damage)
+    {
+        buildingHealth -= damage;
+        //Destroy object if health is zero or below
+        if(buildingHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     //Function to find the bounds of all child objects of a parent gameobject
