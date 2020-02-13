@@ -140,7 +140,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildProgress: 0
   isBuilding: 0
-  buildTime: 5
+  buildTime: 300
   buildingHeight: 0
+  numberOfBuilders: 0
   buildingHealth: 0
   maxBuildingHealth: 100

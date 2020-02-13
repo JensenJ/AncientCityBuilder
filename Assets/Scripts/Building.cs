@@ -8,7 +8,7 @@ public class Building : MonoBehaviour
     [SerializeField] private bool isBuilding = false;
     [SerializeField] private float buildTime = 10.0f;
     [SerializeField] private float buildingHeight;
-
+    [SerializeField] private int numberOfBuilders = 0;
     [SerializeField] private float buildingHealth = 0.0f;
     [SerializeField] private float maxBuildingHealth = 100.0f;
     // Start is called before the first frame update
@@ -22,10 +22,19 @@ public class Building : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(numberOfBuilders == 0)
+        {
+            isBuilding = false;
+        }
+        else
+        {
+            isBuilding = true;
+        }
+
         //if has not finished building yet
         if (isBuilding) {
             //Increase build progress
-            buildProgress += Time.deltaTime / buildTime;
+            buildProgress += (Time.deltaTime / buildTime) * numberOfBuilders;
 
             //Building trnasformation (rise out of ground when building)
             Vector3 buildingPosition = transform.position;
@@ -49,9 +58,14 @@ public class Building : MonoBehaviour
     }
 
     //Function called by building controller when the building is actually placed
-    public void StartBuilding()
+    public void AddBuilder()
     {
-        isBuilding = true;
+        numberOfBuilders++;
+    }
+
+    public void RemoveBuilder()
+    {
+        numberOfBuilders--;
     }
 
     //Getters and Setters
