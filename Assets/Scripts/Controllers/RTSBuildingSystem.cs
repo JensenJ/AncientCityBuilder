@@ -94,7 +94,9 @@ public class RTSBuildingSystem : MonoBehaviour
                 {
                     //Create new object and remove gold from player resources
                     GameObject go = Instantiate(buildings[selectedBuilding - 1].buildingPrefab, ghostBuilding.transform.position, ghostBuilding.transform.rotation);
-                    go.GetComponent<Building>().AddBuilder();
+                    Building building = go.GetComponent<Building>();
+                    building.CreateScaffolding();
+                    building.AddBuilder();
                     GameResources.RemoveGoldAmount(buildings[selectedBuilding - 1].goldCost);
                     //Destroy ghost building if shift is not held down, also reset selection
                     if (!Input.GetKey(KeyCode.LeftShift))

@@ -140,8 +140,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildProgress: 0
   isBuilding: 0
-  buildTime: 300
-  buildingHeight: 0
+  buildTime: 10
+  buildingEdges: {x: 0, y: 0, z: 0}
   numberOfBuilders: 0
   buildingHealth: 0
   maxBuildingHealth: 100
+  scaffoldingPrefab: {fileID: 8857374252325005955, guid: 8e4a443dfc9406d45ab01da12ff488d6,
+    type: 3}
+  scaffolding:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  scaffoldingPosition:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
