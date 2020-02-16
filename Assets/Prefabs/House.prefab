@@ -143,4 +143,4 @@ MonoBehaviour:
   maxBuildingHealth: 100
   scaffoldingPrefab: {fileID: 8857374252325005955, guid: 8e4a443dfc9406d45ab01da12ff488d6,
     type: 3}
-  scaffoldingSpace: 1
+  scaffoldingSpace: 0

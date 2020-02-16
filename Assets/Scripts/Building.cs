@@ -47,12 +47,12 @@ public class Building : MonoBehaviour
             if(i % 2 != 0)
             {
                 //Scale to fit x side
-                scaffolding[i].transform.localScale = new Vector3(buildingEdges.x + scaffoldingSpace, buildingEdges.y, 1.0f);
+                scaffolding[i].transform.localScale = new Vector3(buildingEdges.x + scaffoldingSpace, buildingEdges.y, 0.5f);
             }
             else
             {
                 //Scale to fit z side
-                scaffolding[i].transform.localScale = new Vector3(1.0f, buildingEdges.y, buildingEdges.z + scaffoldingSpace);
+                scaffolding[i].transform.localScale = new Vector3(0.5f, buildingEdges.y, buildingEdges.z + scaffoldingSpace);
             }
         }
     }
