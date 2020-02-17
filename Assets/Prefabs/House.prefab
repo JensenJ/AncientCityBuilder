@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468146446989198197}
-  m_Mesh: {fileID: -4315542600374322986, guid: 5ad339bbbc8a44045885983550cef9e1, type: 3}
+  m_Mesh: {fileID: 4887216478360415443, guid: 5ad339bbbc8a44045885983550cef9e1, type: 3}
 --- !u!23 &1695028781828745279
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -143,4 +143,4 @@ MonoBehaviour:
   maxBuildingHealth: 100
   scaffoldingPrefab: {fileID: 8857374252325005955, guid: 8e4a443dfc9406d45ab01da12ff488d6,
     type: 3}
-  scaffoldingSpace: 0
+  scaffoldingSpace: 1
