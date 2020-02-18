@@ -87,7 +87,7 @@ public class RTSBuildingSystem : MonoBehaviour
             //Resource cost check
             if (buildings[selectedBuilding - 1].goldCost <= GameResources.GetGoldAmount())
             {
-                ghostBuilding.transform.GetChild(0).GetComponent<MeshRenderer>().material = ghostValidMat;
+                ChangeBuildingMaterial(ghostValidMat);
 
                 //If user clicks to place object
                 if (Input.GetMouseButtonDown(0))
@@ -109,7 +109,7 @@ public class RTSBuildingSystem : MonoBehaviour
             }
             else
             {
-                ghostBuilding.transform.GetChild(0).GetComponent<MeshRenderer>().material = ghostInvalidMat;
+                ChangeBuildingMaterial(ghostInvalidMat);
             }
 
             //Destroy ghostbuilding if escape pressed, reset selection.
@@ -119,6 +119,27 @@ public class RTSBuildingSystem : MonoBehaviour
                 selectedBuilding = 0;
                 lastSelectedBuilding = 0;
             }
+        }
+    }
+
+    //Function to change all of the materials of a renderer
+    void ChangeBuildingMaterial(Material material)
+    {
+        Renderer[] children;
+        children = ghostBuilding.GetComponentsInChildren<Renderer>();
+        //For every renderer attached to ghost building
+        foreach(Renderer rend in children)
+        {
+            //Create material array based on length of renderer's material
+            Material[] mats = new Material[rend.materials.Length];
+            //For every material in that array
+            for (int i = 0; i < rend.materials.Length; i++)
+            {
+                //Set material to defined material
+                mats[i] = material;
+            }
+            //Set array
+            rend.materials = mats;
         }
     }
 }
