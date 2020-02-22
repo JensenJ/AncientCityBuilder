@@ -12,6 +12,7 @@ public class TabGroup : MonoBehaviour
     [SerializeField] Color tabActive = new Color();
     [SerializeField] TabButton selectedTab = null;
     [SerializeField] List<GameObject> objectsToSwap = null;
+    [SerializeField] bool disableTabsOnSwitch = true;
 
     //Function called on all tabbuttons to add them to this grouping
     public void Subscribe(TabButton button)
@@ -72,7 +73,10 @@ public class TabGroup : MonoBehaviour
             }
             else
             {
-                objectsToSwap[i].SetActive(false);
+                if (disableTabsOnSwitch)
+                {
+                    objectsToSwap[i].SetActive(false);
+                }
             }
         }
     }

@@ -6,28 +6,45 @@ public class UIAnimator : MonoBehaviour
 {
     public enum UIAnimationTypes
     {
-        Move, 
-        Fade
+        Move,
+        Fade,
+        Scale
     }
 
     public GameObject objectToAnimate;
 
-    public UIAnimationTypes animationType;
-    public LeanTweenType easeType;
-    public float duration;
-    public float delay;
+    [Header("Enable Settings")]
+    [SerializeField] UIAnimationTypes inAnimationType = UIAnimationTypes.Fade;
+    [SerializeField] LeanTweenType inEaseType = LeanTweenType.notUsed;
 
-    public bool loop;
-    public bool pingpong;
+    [SerializeField] float inDuration = 0.5f;
+    [SerializeField] float inDelay = 0.0f;
 
-    public bool startPositionOffset;
-    public Vector3 from;
-    public Vector3 to;
+    [SerializeField] bool inLoop = false;
+    [SerializeField] bool inPingpong = false;
+    [SerializeField] bool inStartPositionOffset = true;
+
+    [SerializeField] Vector3 inFrom = new Vector3();
+    [SerializeField] Vector3 inTo = new Vector3();
+
+    [SerializeField] bool showOnEnable = true;
+
+    [Header("Disable Settings")]
+    [SerializeField] UIAnimationTypes outAnimationType = UIAnimationTypes.Fade;
+    [SerializeField] LeanTweenType outEaseType = LeanTweenType.notUsed;
+
+    [SerializeField] float outDuration = 0.5f;
+    [SerializeField] float outDelay = 0.0f;
+
+    [SerializeField] bool outLoop = false;
+    [SerializeField] bool outPingpong = false;
+    [SerializeField] bool outStartPositionOffset = true;
+
+    [SerializeField] Vector3 outFrom = new Vector3();
+    [SerializeField] Vector3 outTo = new Vector3();
 
     private LTDescr tweenObject;
 
-    public bool showOnEnable;
-    public bool WorkOnDisable;
 
     public void OnEnable()
     {
@@ -39,10 +56,10 @@ public class UIAnimator : MonoBehaviour
 
     public void Show()
     {
-        HandleTween();
+        HandleTween(false, inAnimationType, inEaseType, inDelay, inDuration, inLoop, inPingpong, inStartPositionOffset);
     }
 
-    public void HandleTween()
+    public void HandleTween(bool isDisabling, UIAnimationTypes animationType, LeanTweenType easeType, float delay, float duration, bool loop, bool pingpong, bool startPositionOffset)
     {
         if(objectToAnimate == null)
         {
@@ -52,10 +69,34 @@ public class UIAnimator : MonoBehaviour
         switch (animationType) 
         {
             case UIAnimationTypes.Fade:
-                Fade();
+                if (isDisabling)
+                {
+                    Fade(outFrom, outTo, startPositionOffset, duration);
+                }
+                else
+                {
+                    Fade(inFrom, inTo, startPositionOffset, duration);
+                }
                 break;
             case UIAnimationTypes.Move:
-                MoveAbsolute();
+                if (isDisabling)
+                {
+                    MoveAbsolute(outFrom, outTo, duration);
+                }
+                else
+                {
+                    MoveAbsolute(inFrom, inTo, duration);
+                }
+                break;
+            case UIAnimationTypes.Scale:
+                if (isDisabling)
+                {
+                    Scale(outFrom, outTo, startPositionOffset, duration);
+                }
+                else
+                {
+                    Scale(inFrom, inTo, startPositionOffset, duration);
+                }
                 break;
         }
 
@@ -73,7 +114,7 @@ public class UIAnimator : MonoBehaviour
         }
     }
 
-    public void Fade()
+    public void Fade(Vector3 from, Vector3 to, bool startPositionOffset, float duration)
     {
         if(gameObject.GetComponent<CanvasGroup>() == null)
         {
@@ -87,27 +128,33 @@ public class UIAnimator : MonoBehaviour
         tweenObject = LeanTween.alphaCanvas(objectToAnimate.GetComponent<CanvasGroup>(), to.x, duration);
     }
 
-    public void MoveAbsolute()
+    public void MoveAbsolute(Vector3 from, Vector3 to, float duration)
     {
         objectToAnimate.GetComponent<RectTransform>().anchoredPosition = from;
         tweenObject = LeanTween.move(objectToAnimate.GetComponent<RectTransform>(), to, duration);
     }
 
-    void SwapDirection()
+    public void Scale(Vector3 from, Vector3 to, bool startPositionOffset, float duration)
     {
-        var temp = from;
-        from = to;
-        to = temp;
+        if (startPositionOffset)
+        {
+            objectToAnimate.GetComponent<RectTransform>().localScale = from;
+            tweenObject = LeanTween.scale(objectToAnimate, to, duration);
+        }
     }
 
-    public void Disable()
+    public void Disable(bool destroyObject)
     {
-        SwapDirection();
-        HandleTween();
-        tweenObject.setOnComplete(() =>
-        {
-            SwapDirection();
-            gameObject.SetActive(false);
+        HandleTween(true, outAnimationType, outEaseType, outDelay, outDuration, outLoop, outPingpong, outStartPositionOffset);
+        tweenObject.setOnComplete(() => {
+            if (destroyObject)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         });
     }
 }
