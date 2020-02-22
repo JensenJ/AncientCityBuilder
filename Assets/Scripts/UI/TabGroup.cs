@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TabGroup : MonoBehaviour
 {
@@ -11,8 +9,8 @@ public class TabGroup : MonoBehaviour
     [SerializeField] Color tabHover = new Color();
     [SerializeField] Color tabActive = new Color();
     [SerializeField] TabButton selectedTab = null;
-    [SerializeField] List<GameObject> objectsToSwap = null;
     [SerializeField] bool disableTabsOnSwitch = true;
+    [SerializeField] List<GameObject> objectsToSwap = null;
 
     //Function called on all tabbuttons to add them to this grouping
     public void Subscribe(TabButton button)

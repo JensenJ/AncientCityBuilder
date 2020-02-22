@@ -2341,7 +2341,7 @@ MonoBehaviour:
   objectToAnimate: {fileID: 0}
   inAnimationType: 0
   inEaseType: 21
-  inDuration: 0.5
+  inDuration: 0.25
   inDelay: 0
   inLoop: 0
   inPingpong: 0
@@ -2351,13 +2351,14 @@ MonoBehaviour:
   showOnEnable: 1
   outAnimationType: 0
   outEaseType: 21
-  outDuration: 0.5
+  outDuration: 0.25
   outDelay: 0
   outLoop: 0
   outPingpong: 0
   outStartPositionOffset: 1
   outFrom: {x: 0, y: 0, z: 0}
   outTo: {x: 2000, y: 0, z: 0}
+  destroyOnDisable: 0
 --- !u!1 &654671017
 GameObject:
   m_ObjectHideFlags: 0
@@ -4850,7 +4851,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1648521913}
         m_MethodName: Disable
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5822,13 +5823,13 @@ MonoBehaviour:
   tabHover: {r: 0.8627451, g: 0.8666667, b: 0.88235295, a: 1}
   tabActive: {r: 0.9098039, g: 0.25490198, b: 0.09411765, a: 1}
   selectedTab: {fileID: 0}
+  disableTabsOnSwitch: 1
   objectsToSwap:
   - {fileID: 1648521911}
   - {fileID: 652963105}
   - {fileID: 1252446352}
   - {fileID: 1982395409}
   - {fileID: 1033454788}
-  disableTabsOnSwitch: 0
 --- !u!114 &1381402809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5861,6 +5862,7 @@ MonoBehaviour:
   outStartPositionOffset: 1
   outFrom: {x: 910, y: 0, z: 0}
   outTo: {x: 910, y: 400, z: 0}
+  destroyOnDisable: 0
 --- !u!1 &1416330081
 GameObject:
   m_ObjectHideFlags: 0
@@ -7063,7 +7065,7 @@ MonoBehaviour:
   objectToAnimate: {fileID: 0}
   inAnimationType: 0
   inEaseType: 21
-  inDuration: 0.5
+  inDuration: 0.25
   inDelay: 0
   inLoop: 0
   inPingpong: 0
@@ -7073,13 +7075,14 @@ MonoBehaviour:
   showOnEnable: 1
   outAnimationType: 0
   outEaseType: 21
-  outDuration: 0.5
+  outDuration: 0.25
   outDelay: 0
   outLoop: 0
   outPingpong: 0
   outStartPositionOffset: 1
   outFrom: {x: 0, y: 0, z: 0}
   outTo: {x: 2000, y: 0, z: 0}
+  destroyOnDisable: 0
 --- !u!222 &1648521914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8084,7 +8087,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 652963108}
         m_MethodName: Disable
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

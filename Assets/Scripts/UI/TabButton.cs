@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
@@ -57,7 +55,6 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     }
 
     //Deselection callback
-
     public void Deselect()
     {
         if(onTabDeselected != null)
