@@ -5,11 +5,12 @@ public class TabGroup : MonoBehaviour
 {
     //Settings
     [SerializeField] List<TabButton> tabButtons = null;
-    [SerializeField] Color tabIdle = new Color();
-    [SerializeField] Color tabHover = new Color();
-    [SerializeField] Color tabActive = new Color();
+    [SerializeField] Color tabIdleColour = new Color();
+    [SerializeField] Color tabHoverColour = new Color();
+    [SerializeField] Color tabActiveColour = new Color();
     [SerializeField] TabButton selectedTab = null;
     [SerializeField] bool disableTabsOnSwitch = true;
+    [SerializeField] bool canReselectTabs = true;
     [SerializeField] List<GameObject> objectsToSwap = null;
 
     //Function called on all tabbuttons to add them to this grouping
@@ -26,11 +27,11 @@ public class TabGroup : MonoBehaviour
     public void OnTabEnter(TabButton button)
     {
         //Reset tabs
-        ResetTabs();
+        ResetTabColours();
         //Change to hover colour
         if (selectedTab == null || button != selectedTab)
         {
-            button.background.color = tabHover;
+            button.background.color = tabHoverColour;
         }
     }
 
@@ -38,12 +39,23 @@ public class TabGroup : MonoBehaviour
     public void OnTabExit(TabButton button)
     {
         //Reset tabs
-        ResetTabs();
+        ResetTabColours();
     }
 
     //When the tab is selected
     public void OnTabSelected(TabButton button)
     {
+        //If tabs cannot be reselected
+        if (!canReselectTabs)
+        {
+            //If new tab is equal to current tab
+            if(button == selectedTab)
+            {
+                //return out of function
+                return;
+            }
+        }
+
         //Callback on deselect
         if(selectedTab != null)
         {
@@ -57,9 +69,9 @@ public class TabGroup : MonoBehaviour
         selectedTab.Select();
 
         //Reset tabs
-        ResetTabs();
+        ResetTabColours();
         //Set to active colour
-        button.background.color = tabActive;
+        button.background.color = tabActiveColour;
         //Get page index for that tab
         int index = button.transform.GetSiblingIndex();
         //Set page index active
@@ -80,7 +92,7 @@ public class TabGroup : MonoBehaviour
     }
 
     //Function to reset tabs
-    public void ResetTabs()
+    public void ResetTabColours()
     {
         //For every tab button
         foreach(TabButton button in tabButtons)
@@ -88,7 +100,7 @@ public class TabGroup : MonoBehaviour
             //If this button is selected, skip it
             if(selectedTab != null && button == selectedTab) { continue; }
             //Set to idle colour
-            button.background.color = tabIdle;
+            button.background.color = tabIdleColour;
         }
     }
 }

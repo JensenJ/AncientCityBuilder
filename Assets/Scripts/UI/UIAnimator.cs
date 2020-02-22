@@ -66,7 +66,38 @@ public class UIAnimator : MonoBehaviour
     //Show animation
     public void Show()
     {
+        //Cancel tween if one already in progress
+        if(objectToAnimate != null)
+        {
+            objectToAnimate = gameObject;
+            LeanTween.cancel(objectToAnimate);
+        }
         HandleTween(false, inAnimationType, inEaseType, inDelay, inDuration, inLoop, inPingpong, inStartPositionOffset);
+    }
+
+    //Function to disable the animations
+    public void Disable()
+    {
+        //Cancel tween if one already in progress
+        if (objectToAnimate != null)
+        {
+            objectToAnimate = gameObject;
+            LeanTween.cancel(objectToAnimate);
+        }
+
+        //Tween handle
+        HandleTween(true, outAnimationType, outEaseType, outDelay, outDuration, outLoop, outPingpong, outStartPositionOffset);
+        //Run upon completion
+        tweenObject.setOnComplete(() => {
+            if (destroyOnDisable)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        });
     }
 
     //Handles actual tween logic
@@ -172,23 +203,5 @@ public class UIAnimator : MonoBehaviour
             objectToAnimate.GetComponent<RectTransform>().localScale = from;
             tweenObject = LeanTween.scale(objectToAnimate, to, duration);
         }
-    }
-
-    //Function to disable the animations
-    public void Disable()
-    {
-        //Tween handle
-        HandleTween(true, outAnimationType, outEaseType, outDelay, outDuration, outLoop, outPingpong, outStartPositionOffset);
-        //Run upon completion
-        tweenObject.setOnComplete(() => {
-            if (destroyOnDisable)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
-        });
     }
 }
