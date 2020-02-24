@@ -72,6 +72,7 @@ public class UIAnimator : MonoBehaviour
             objectToAnimate = gameObject;
             LeanTween.cancel(objectToAnimate);
         }
+
         HandleTween(false, inAnimationType, inEaseType, inDelay, inDuration, inLoop, inPingpong, inStartPositionOffset);
     }
 

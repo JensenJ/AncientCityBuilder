@@ -103,4 +103,15 @@ public class TabGroup : MonoBehaviour
             button.background.color = tabIdleColour;
         }
     }
+
+    //Function to disable the tab system
+    public void DisableTabSystem()
+    {
+        ResetTabColours();
+        for (int i = 0; i < objectsToSwap.Count; i++)
+        {
+            tabButtons[i].Deselect();
+            objectsToSwap[i].SetActive(false);
+        }
+    }
 }
