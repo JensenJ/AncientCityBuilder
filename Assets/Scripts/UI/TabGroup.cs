@@ -107,11 +107,21 @@ public class TabGroup : MonoBehaviour
     //Function to disable the tab system
     public void DisableTabSystem()
     {
-        ResetTabColours();
+        //Set selected tab to null
+        selectedTab = null;
+        //For every main body window
         for (int i = 0; i < objectsToSwap.Count; i++)
         {
+            //Call deselect callback on tab
             tabButtons[i].Deselect();
-            objectsToSwap[i].SetActive(false);
+            //If disable tabs on switch mode (no animation or callback that handles disabling objects)
+            if (disableTabsOnSwitch)
+            {
+                //Disable body window
+                objectsToSwap[i].SetActive(false);
+            }
         }
+        //Reset the tab colours
+        ResetTabColours();
     }
 }

@@ -27,35 +27,9 @@ public class MainMenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape) && isOnMenu == false)
-        //{
-        //    isOnMenu = true;
-        //    if (handleUIEnabledStatus)
-        //    {
-        //        tabSystemRef.SetActive(true);
-        //    }
-        //    if (handleUIDisabledStatus)
-        //    {
-        //        pressAnyKeyRef.SetActive(false);
-        //    }
-        //    onEnterMenu?.Invoke();
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Escape) && isOnMenu == true)
-        //{
-        //    isOnMenu = false;
-        //    if (handleUIEnabledStatus)
-        //    {
-        //        pressAnyKeyRef.SetActive(true);
-        //    }
-        //    if (handleUIDisabledStatus)
-        //    {
-        //        tabSystemRef.SetActive(false);
-        //    }
-        //    onExitMenu?.Invoke();
-        //}
-
-        if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Escape))
+        if (Input.anyKeyDown && isOnMenu == false)
         {
+            isOnMenu = true;
             if (handleUIEnabledStatus)
             {
                 tabSystemRef.SetActive(true);
@@ -66,9 +40,9 @@ public class MainMenuManager : MonoBehaviour
             }
             onEnterMenu?.Invoke();
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
+        else if (Input.GetKeyDown(KeyCode.Escape) && isOnMenu == true)
         {
+            isOnMenu = false;
             if (handleUIEnabledStatus)
             {
                 pressAnyKeyRef.SetActive(true);
@@ -79,6 +53,5 @@ public class MainMenuManager : MonoBehaviour
             }
             onExitMenu?.Invoke();
         }
-
     }
 }
