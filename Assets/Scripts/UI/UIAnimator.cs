@@ -4,101 +4,72 @@ using UnityEngine;
 
 public class UIAnimator : MonoBehaviour
 {
-    //Different animation types currently supported
-    public enum UIAnimationTypes
-    {
-        Move,
-        Fade,
-        Scale
-    }
-
 
     //Object to animate
-    [SerializeField] GameObject objectToAnimate;
-
-    //Settings for the enabling animation
-    [Header("Enable Settings")]
-    [SerializeField] UIAnimationTypes inAnimationType = UIAnimationTypes.Fade;
-    [SerializeField] LeanTweenType inEaseType = LeanTweenType.notUsed;
-
-    [SerializeField] float inDuration = 0.5f;
-    [SerializeField] float inDelay = 0.0f;
-
-    [SerializeField] bool inLoop = false;
-    [SerializeField] bool inPingpong = false;
-    [SerializeField] bool inStartPositionOffset = true;
-
-    [SerializeField] Vector3 inFrom = new Vector3();
-    [SerializeField] Vector3 inTo = new Vector3();
-
-    [SerializeField] bool showOnEnable = true;
-
-    [Header("Disable Settings")]
-    [SerializeField] UIAnimationTypes outAnimationType = UIAnimationTypes.Fade;
-    [SerializeField] LeanTweenType outEaseType = LeanTweenType.notUsed;
-
-    [SerializeField] float outDuration = 0.5f;
-    [SerializeField] float outDelay = 0.0f;
-
-    [SerializeField] bool outLoop = false;
-    [SerializeField] bool outPingpong = false;
-    [SerializeField] bool outStartPositionOffset = true;
-
-    [SerializeField] Vector3 outFrom = new Vector3();
-    [SerializeField] Vector3 outTo = new Vector3();
-
-    [SerializeField] bool destroyOnDisable = false;
+    [SerializeField] GameObject objectToAnimate = null;
+    [SerializeField] UIAnimationAsset animationSettings = null;
 
     private LTDescr tweenObject;
-
 
     //When game object enabled
     public void OnEnable()
     {
-        //If animation should be shown
-        if (showOnEnable)
+        if (animationSettings != null)
         {
-            //Show it
-            Show();
+            //If animation should be shown
+            if (animationSettings.showOnEnable)
+            {
+                //Show it
+                Show();
+            }
         }
     }
 
     //Show animation
     public void Show()
     {
-        //Cancel tween if one already in progress
-        if(objectToAnimate != null)
+        if (animationSettings != null)
         {
-            objectToAnimate = gameObject;
-            LeanTween.cancel(objectToAnimate);
-        }
+            //Cancel tween if one already in progress
+            if (objectToAnimate != null)
+            {
+                objectToAnimate = gameObject;
+                LeanTween.cancel(objectToAnimate);
+            }
 
-        HandleTween(false, inAnimationType, inEaseType, inDelay, inDuration, inLoop, inPingpong, inStartPositionOffset);
+            HandleTween(false, animationSettings.inAnimationType, animationSettings.inEaseType, animationSettings.inDelay,
+                animationSettings.inDuration, animationSettings.inLoop, animationSettings.inPingpong, animationSettings.inStartPositionOffset);
+        }
     }
 
     //Function to disable the animations
     public void Disable()
     {
-        //Cancel tween if one already in progress
-        if (objectToAnimate != null)
+        if (animationSettings != null)
         {
-            objectToAnimate = gameObject;
-            LeanTween.cancel(objectToAnimate);
-        }
+            //Cancel tween if one already in progress
+            if (objectToAnimate != null)
+            {
+                objectToAnimate = gameObject;
+                LeanTween.cancel(objectToAnimate);
+            }
 
-        //Tween handle
-        HandleTween(true, outAnimationType, outEaseType, outDelay, outDuration, outLoop, outPingpong, outStartPositionOffset);
-        //Run upon completion
-        tweenObject.setOnComplete(() => {
-            if (destroyOnDisable)
+            //Tween handle
+            HandleTween(true, animationSettings.outAnimationType, animationSettings.outEaseType, animationSettings.outDelay,
+                animationSettings.outDuration, animationSettings.outLoop, animationSettings.outPingpong, animationSettings.outStartPositionOffset);
+            //Run upon completion
+            tweenObject.setOnComplete(() =>
             {
-                Destroy(gameObject);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
-        });
+                if (animationSettings.destroyOnDisable)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
+            });
+        }
     }
 
     //Handles actual tween logic
@@ -118,12 +89,12 @@ public class UIAnimator : MonoBehaviour
                 if (isDisabling)
                 {
                     //Fade out
-                    Fade(outFrom, outTo, startPositionOffset, duration);
+                    Fade(animationSettings.outFrom, animationSettings.outTo, startPositionOffset, duration);
                 }
                 else
                 {
                     //Fade in
-                    Fade(inFrom, inTo, startPositionOffset, duration);
+                    Fade(animationSettings.inFrom, animationSettings.inTo, startPositionOffset, duration);
                 }
                 break;
             //Move
@@ -131,12 +102,12 @@ public class UIAnimator : MonoBehaviour
                 if (isDisabling)
                 {
                     //Move out
-                    MoveAbsolute(outFrom, outTo, duration);
+                    MoveAbsolute(animationSettings.outFrom, animationSettings.outTo, duration);
                 }
                 else
                 {
                     //Move in
-                    MoveAbsolute(inFrom, inTo, duration);
+                    MoveAbsolute(animationSettings.inFrom, animationSettings.inTo, duration);
                 }
                 break;
             //Scale
@@ -144,12 +115,12 @@ public class UIAnimator : MonoBehaviour
                 if (isDisabling)
                 {
                     //Scale out
-                    Scale(outFrom, outTo, startPositionOffset, duration);
+                    Scale(animationSettings.outFrom, animationSettings.outTo, startPositionOffset, duration);
                 }
                 else
                 {
                     //Scale in
-                    Scale(inFrom, inTo, startPositionOffset, duration);
+                    Scale(animationSettings.inFrom, animationSettings.inTo, startPositionOffset, duration);
                 }
                 break;
         }
@@ -205,4 +176,11 @@ public class UIAnimator : MonoBehaviour
             tweenObject = LeanTween.scale(objectToAnimate, to, duration);
         }
     }
+}
+
+public enum UIAnimationTypes
+{
+    Move,
+    Fade,
+    Scale
 }

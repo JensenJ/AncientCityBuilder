@@ -2339,26 +2339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToAnimate: {fileID: 0}
-  inAnimationType: 0
-  inEaseType: 21
-  inDuration: 0.25
-  inDelay: 0
-  inLoop: 0
-  inPingpong: 0
-  inStartPositionOffset: 1
-  inFrom: {x: -2000, y: 0, z: 0}
-  inTo: {x: 0, y: 0, z: 0}
-  showOnEnable: 0
-  outAnimationType: 0
-  outEaseType: 21
-  outDuration: 0.25
-  outDelay: 0
-  outLoop: 0
-  outPingpong: 0
-  outStartPositionOffset: 1
-  outFrom: {x: 0, y: 0, z: 0}
-  outTo: {x: 2000, y: 0, z: 0}
-  destroyOnDisable: 0
+  animationSettings: {fileID: 11400000, guid: 8b2bc41591360d641969c89eb5b671c3, type: 2}
 --- !u!1 &654671017
 GameObject:
   m_ObjectHideFlags: 0
@@ -5855,26 +5836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToAnimate: {fileID: 0}
-  inAnimationType: 0
-  inEaseType: 21
-  inDuration: 0.25
-  inDelay: 0
-  inLoop: 0
-  inPingpong: 0
-  inStartPositionOffset: 1
-  inFrom: {x: 910, y: 200, z: 0}
-  inTo: {x: 910, y: 0, z: 0}
-  showOnEnable: 1
-  outAnimationType: 0
-  outEaseType: 21
-  outDuration: 0.25
-  outDelay: 0
-  outLoop: 0
-  outPingpong: 0
-  outStartPositionOffset: 1
-  outFrom: {x: 910, y: 0, z: 0}
-  outTo: {x: 910, y: 200, z: 0}
-  destroyOnDisable: 0
+  animationSettings: {fileID: 11400000, guid: 1627bee2ef714984587ef7330cb18bef, type: 2}
 --- !u!1 &1416330081
 GameObject:
   m_ObjectHideFlags: 0
@@ -7075,26 +7037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToAnimate: {fileID: 0}
-  inAnimationType: 0
-  inEaseType: 21
-  inDuration: 0.25
-  inDelay: 0
-  inLoop: 0
-  inPingpong: 0
-  inStartPositionOffset: 1
-  inFrom: {x: -2000, y: 0, z: 0}
-  inTo: {x: 0, y: 0, z: 0}
-  showOnEnable: 0
-  outAnimationType: 0
-  outEaseType: 21
-  outDuration: 0.25
-  outDelay: 0
-  outLoop: 0
-  outPingpong: 0
-  outStartPositionOffset: 1
-  outFrom: {x: 0, y: 0, z: 0}
-  outTo: {x: 2000, y: 0, z: 0}
-  destroyOnDisable: 0
+  animationSettings: {fileID: 11400000, guid: 8b2bc41591360d641969c89eb5b671c3, type: 2}
 --- !u!222 &1648521914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7709,26 +7652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToAnimate: {fileID: 0}
-  inAnimationType: 1
-  inEaseType: 0
-  inDuration: 0.25
-  inDelay: 0
-  inLoop: 0
-  inPingpong: 0
-  inStartPositionOffset: 1
-  inFrom: {x: 0, y: 0, z: 0}
-  inTo: {x: 1, y: 1, z: 1}
-  showOnEnable: 1
-  outAnimationType: 1
-  outEaseType: 0
-  outDuration: 0.25
-  outDelay: 0
-  outLoop: 0
-  outPingpong: 0
-  outStartPositionOffset: 1
-  outFrom: {x: 1, y: 1, z: 1}
-  outTo: {x: 0, y: 0, z: 0}
-  destroyOnDisable: 0
+  animationSettings: {fileID: 11400000, guid: aebff143cb7975d47aa698bbab56ac15, type: 2}
 --- !u!1 &1860752579
 GameObject:
   m_ObjectHideFlags: 0
@@ -9101,6 +9025,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1381402809}
         m_MethodName: Disable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1381402808}
+        m_MethodName: DisableTabSystem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
