@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIAnimator : MonoBehaviour
 {
@@ -10,6 +11,26 @@ public class UIAnimator : MonoBehaviour
     [SerializeField] UIAnimationAsset animationSettings = null;
 
     private LTDescr tweenObject;
+
+    //Function to check whether the parent is suitable for this animation to work correctly
+    public void CheckForIdealTweenConditions()
+    {
+        //If this object is not set yet
+        if (objectToAnimate != null)
+        {
+            //Get parent object
+            GameObject parentObject = objectToAnimate.transform.parent.gameObject;
+            if(parentObject != null)
+            {
+                //Try to find a layout group on the parent
+                LayoutGroup parentLayoutGroup = parentObject.GetComponent<LayoutGroup>();
+                if(parentLayoutGroup != null)
+                {
+                    Debug.LogWarning("Parent of UI Animator should not have any layout groups as it can cause tweening to function incorrectly");
+                }
+            }
+        }
+    }
 
     //When game object enabled
     public void OnEnable()
@@ -40,6 +61,8 @@ public class UIAnimator : MonoBehaviour
                 LeanTween.cancel(objectToAnimate);
             }
 
+            CheckForIdealTweenConditions();
+
             HandleTween(false, animationSettings.inAnimationType, animationSettings.inEaseType, animationSettings.inDelay,
                 animationSettings.inDuration, animationSettings.inLoop, animationSettings.inPingpong, animationSettings.inStartPositionOffset);
 
@@ -65,6 +88,8 @@ public class UIAnimator : MonoBehaviour
             {
                 LeanTween.cancel(objectToAnimate);
             }
+
+            CheckForIdealTweenConditions();
 
             //Tween handle
             HandleTween(true, animationSettings.outAnimationType, animationSettings.outEaseType, animationSettings.outDelay,

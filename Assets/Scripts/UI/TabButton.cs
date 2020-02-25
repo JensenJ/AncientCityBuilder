@@ -42,7 +42,29 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     {
         //Button setup
         background = GetComponent<Image>();
-        tabGroup.Subscribe(this);
+        //If tab group is not assigned
+        if(tabGroup == null)
+        {
+            //Try to find tabgroup on parent
+            TabGroup tempGroup = transform.parent.GetComponent<TabGroup>();
+            if(tempGroup != null)
+            {
+                //Assign tab group
+                tabGroup = tempGroup;
+                //Subscribe to tab group events
+                tabGroup.Subscribe(this);
+            }
+            else
+            {
+                //Warn user
+                Debug.LogError("TabButton does not have tab group set");
+            }
+        }
+        else
+        {
+            //Subscribe to tab group events
+            tabGroup.Subscribe(this);
+        }
     }
     //Selection callback
     public void Select()
