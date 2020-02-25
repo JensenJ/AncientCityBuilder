@@ -19,9 +19,9 @@ MonoBehaviour:
   inLoop: 0
   inPingpong: 0
   inStartPositionOffset: 1
-  inFrom: {x: 910, y: 200, z: 0}
-  inTo: {x: 910, y: 0, z: 0}
-  showOnEnable: 1
+  inFrom: {x: 0, y: 200, z: 0}
+  inTo: {x: 0, y: 0, z: 0}
+  showOnEnable: 0
   outAnimationType: 0
   outEaseType: 21
   outDuration: 0.25
@@ -29,6 +29,6 @@ MonoBehaviour:
   outLoop: 0
   outPingpong: 0
   outStartPositionOffset: 1
-  outFrom: {x: 910, y: 0, z: 0}
-  outTo: {x: 910, y: 200, z: 0}
+  outFrom: {x: 0, y: 0, z: 0}
+  outTo: {x: 0, y: 200, z: 0}
   destroyOnDisable: 0

@@ -30,15 +30,24 @@ public class UIAnimator : MonoBehaviour
     {
         if (animationSettings != null)
         {
-            //Cancel tween if one already in progress
-            if (objectToAnimate != null)
+            //Null pointer check and cancel tween if one already in progress
+            if (objectToAnimate == null)
             {
                 objectToAnimate = gameObject;
+            }
+            else
+            {
                 LeanTween.cancel(objectToAnimate);
             }
 
             HandleTween(false, animationSettings.inAnimationType, animationSettings.inEaseType, animationSettings.inDelay,
                 animationSettings.inDuration, animationSettings.inLoop, animationSettings.inPingpong, animationSettings.inStartPositionOffset);
+
+            //Turns object to active if object is actually tweening
+            if (LeanTween.isTweening(objectToAnimate))
+            {
+                objectToAnimate.SetActive(true);
+            }
         }
     }
 
@@ -47,10 +56,13 @@ public class UIAnimator : MonoBehaviour
     {
         if (animationSettings != null)
         {
-            //Cancel tween if one already in progress
-            if (objectToAnimate != null)
+            //Null pointer check cancel tween if one already in progress
+            if (objectToAnimate == null)
             {
                 objectToAnimate = gameObject;
+            }
+            else
+            {
                 LeanTween.cancel(objectToAnimate);
             }
 

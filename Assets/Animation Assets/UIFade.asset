@@ -18,7 +18,7 @@ MonoBehaviour:
   inDelay: 0
   inLoop: 0
   inPingpong: 0
-  inStartPositionOffset: 1
+  inStartPositionOffset: 0
   inFrom: {x: 0, y: 0, z: 0}
   inTo: {x: 1, y: 1, z: 1}
   showOnEnable: 1
