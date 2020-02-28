@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: UITabSystemPage
   m_EditorClassIdentifier: 
   inAnimationType: 0
-  inEaseType: 21
-  inDuration: 0.25
+  inEaseType: 26
+  inDuration: 0.5
   inDelay: 0
   inLoop: 0
   inPingpong: 0
@@ -23,8 +23,8 @@ MonoBehaviour:
   inTo: {x: 0, y: 0, z: 0}
   showOnEnable: 1
   outAnimationType: 0
-  outEaseType: 21
-  outDuration: 0.25
+  outEaseType: 26
+  outDuration: 0.5
   outDelay: 0
   outLoop: 0
   outPingpong: 0

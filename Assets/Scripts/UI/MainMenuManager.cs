@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using JUCL.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -32,11 +33,11 @@ public class MainMenuManager : MonoBehaviour
             isOnMenu = true;
             if (handleUIEnabledStatus)
             {
-                tabSystemRef.SetActive(true);
+                SetStatusUIElement(tabSystemRef, true);
             }
             if (handleUIDisabledStatus)
             {
-                pressAnyKeyRef.SetActive(false);
+                SetStatusUIElement(pressAnyKeyRef, false);
             }
             onEnterMenu?.Invoke();
         }
@@ -45,13 +46,37 @@ public class MainMenuManager : MonoBehaviour
             isOnMenu = false;
             if (handleUIEnabledStatus)
             {
-                pressAnyKeyRef.SetActive(true);
+                SetStatusUIElement(pressAnyKeyRef, true);
             }
             if (handleUIDisabledStatus)
             {
-                tabSystemRef.SetActive(false);
+                SetStatusUIElement(tabSystemRef, false);
             }
             onExitMenu?.Invoke();
+        }
+    }
+
+    void SetStatusUIElement(GameObject UIElement, bool status)
+    {
+        //Try to get animator
+        JUCLUIAnimator animator = UIElement.GetComponent<JUCLUIAnimator>();
+        //If animator is present
+        if (animator != null)
+        {
+            //Run disable animation
+            if (status == true)
+            {
+                animator.Show();
+            }
+            else
+            {
+                animator.Disable();
+            }
+        }
+        else
+        {
+            //Disable body window
+            UIElement.SetActive(status);
         }
     }
 }

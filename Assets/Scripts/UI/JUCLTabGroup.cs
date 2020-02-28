@@ -11,7 +11,8 @@ namespace JUCL.UI
         [SerializeField] Color tabHoverColour = new Color();
         [SerializeField] Color tabActiveColour = new Color();
         [SerializeField] JUCLTabButton selectedTab = null;
-        [SerializeField] bool disableTabsOnSwitch = true;
+        [SerializeField] bool handleTabEnabled = true;
+        [SerializeField] bool handleTabDisabled = true;
         [SerializeField] bool canReselectTabs = true;
         [SerializeField] List<GameObject> objectsToSwap = null;
 
@@ -81,13 +82,41 @@ namespace JUCL.UI
             {
                 if (i == index)
                 {
-                    objectsToSwap[i].SetActive(true);
+                    if (handleTabEnabled)
+                    {
+                        //Try to get animator
+                        JUCLUIAnimator animator = objectsToSwap[i].GetComponent<JUCLUIAnimator>();
+                        //If animator is present
+                        if (animator != null)
+                        {
+                            //Run show animation
+                            animator.Show();
+                        }
+                        else
+                        {
+                            //Disable body window
+                            objectsToSwap[i].SetActive(true);
+                        }
+                    }
                 }
                 else
                 {
-                    if (disableTabsOnSwitch)
+                    //If tab should be disabled automatically
+                    if (handleTabDisabled)
                     {
-                        objectsToSwap[i].SetActive(false);
+                        //Try to get animator
+                        JUCLUIAnimator animator = objectsToSwap[i].GetComponent<JUCLUIAnimator>();
+                        //If animator is present
+                        if (animator != null)
+                        {
+                            //Run disable animation
+                            animator.Disable();
+                        }
+                        else
+                        {
+                            //Disable body window
+                            objectsToSwap[i].SetActive(false);
+                        }
                     }
                 }
             }
@@ -115,12 +144,30 @@ namespace JUCL.UI
             for (int i = 0; i < objectsToSwap.Count; i++)
             {
                 //Call deselect callback on tab
-                tabButtons[i].Deselect();
-                //If disable tabs on switch mode (no animation or callback that handles disabling objects)
-                if (disableTabsOnSwitch)
+                if (i < tabButtons.Count)
                 {
-                    //Disable body window
-                    objectsToSwap[i].SetActive(false);
+                    if (tabButtons[i] != null)
+                    {
+                        tabButtons[i].Deselect();
+                    }
+                }
+
+                //If disable tabs on switch mode
+                if (handleTabDisabled)
+                {
+                    //Try to get animator
+                    JUCLUIAnimator animator = objectsToSwap[i].GetComponent<JUCLUIAnimator>();
+                    //If animator is present
+                    if(animator != null)
+                    {
+                        //Run disable animation
+                        animator.Disable();
+                    }
+                    else
+                    {
+                        //Disable body window
+                        objectsToSwap[i].SetActive(false);
+                    }
                 }
             }
             //Reset the tab colours
