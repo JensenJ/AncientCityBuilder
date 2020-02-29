@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9231fe5584c90543baed9934d622910, type: 3}
-  m_Name: UITabSystemHeader
+  m_Name: UILoadingBar
   m_EditorClassIdentifier: 
   inAnimationType: 0
   inEaseType: 26
@@ -19,9 +19,9 @@ MonoBehaviour:
   inLoop: 0
   inPingpong: 0
   inStartPositionOffset: 1
-  inFrom: {x: 0, y: 200, z: 0}
-  inTo: {x: 0, y: 0, z: 0}
-  showOnEnable: 0
+  inFrom: {x: 0, y: -20, z: 0}
+  inTo: {x: 0, y: 20, z: 0}
+  showOnEnable: 1
   outAnimationType: 0
   outEaseType: 26
   outDuration: 0.5
@@ -29,6 +29,6 @@ MonoBehaviour:
   outLoop: 0
   outPingpong: 0
   outStartPositionOffset: 1
-  outFrom: {x: 0, y: 0, z: 0}
-  outTo: {x: 0, y: 200, z: 0}
+  outFrom: {x: 0, y: -20, z: 0}
+  outTo: {x: 0, y: 20, z: 0}
   destroyOnDisable: 0

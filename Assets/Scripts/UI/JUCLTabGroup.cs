@@ -172,6 +172,10 @@ namespace JUCL.UI
             }
             //Reset the tab colours
             ResetTabColours();
+
+            //Disable header
+            JUCLUIAnimator headerAnimator = GetComponent<JUCLUIAnimator>();
+            headerAnimator.Disable();
         }
     }
 }

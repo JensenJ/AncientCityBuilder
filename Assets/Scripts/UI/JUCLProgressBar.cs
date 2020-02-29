@@ -8,7 +8,7 @@ using UnityEditor;
 namespace JUCL.UI
 {
     [ExecuteInEditMode()]
-    public class ProgressBar : MonoBehaviour
+    public class JUCLProgressBar : MonoBehaviour
     {
 #if UNITY_EDITOR
         [MenuItem("JUCL/Create/UI/Linear Progress Bar")]
