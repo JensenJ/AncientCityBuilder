@@ -6463,6 +6463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1489283098}
   - component: {fileID: 1489283099}
+  - component: {fileID: 1489283100}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6500,6 +6501,18 @@ MonoBehaviour:
   cellSize: 1
   debugMode: 0
   debugTextHeight: 0.1
+--- !u!114 &1489283100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489283097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc62d0bbe6f85c74d840c6d6c03b6adf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1511201588
 GameObject:
   m_ObjectHideFlags: 0
@@ -8267,6 +8280,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1701514138}
         m_MethodName: DisableTabSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1489283100}
+        m_MethodName: LoadGameMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

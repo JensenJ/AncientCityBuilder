@@ -45,6 +45,10 @@ public class AIUnit : MonoBehaviour
         Entity entity = convertedEntityHolder.GetEntity();
         EntityManager entityManager = convertedEntityHolder.GetEntityManager();
 
+        if(entityManager == null)
+        {
+            return;
+        }
         PathFollowComponent pathFollow = entityManager.GetComponentData<PathFollowComponent>(entity);
         DynamicBuffer<PathPosition> pathPositionBuffer = entityManager.GetBuffer<PathPosition>(entity);
 
