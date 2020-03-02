@@ -21,14 +21,17 @@ namespace JUCL.UI
             if (objectToAnimate != null)
             {
                 //Get parent object
-                GameObject parentObject = objectToAnimate.transform.parent.gameObject;
-                if (parentObject != null)
+                if (objectToAnimate.transform.parent != null)
                 {
-                    //Try to find a layout group on the parent
-                    LayoutGroup parentLayoutGroup = parentObject.GetComponent<LayoutGroup>();
-                    if (parentLayoutGroup != null)
+                    GameObject parentObject = objectToAnimate.transform.parent.gameObject;
+                    if (parentObject != null)
                     {
-                        Debug.LogWarning("Parent of UI Animator should not have any layout groups as it can cause tweening to function incorrectly");
+                        //Try to find a layout group on the parent
+                        LayoutGroup parentLayoutGroup = parentObject.GetComponent<LayoutGroup>();
+                        if (parentLayoutGroup != null)
+                        {
+                            Debug.LogWarning("Parent of UI Animator should not have any layout groups as it can cause tweening to function incorrectly");
+                        }
                     }
                 }
             }
