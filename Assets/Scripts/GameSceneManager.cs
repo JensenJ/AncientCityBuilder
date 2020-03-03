@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JUCL.Utilities;
 
 public class GameSceneManager : MonoBehaviour
 {
@@ -18,21 +19,25 @@ public class GameSceneManager : MonoBehaviour
         }
     }
 
-    public void LoadGameMap()
+    public void LoadGameMap(float delay)
     {
-        GameManager manager = GetGameManager();
-        if (manager != null)
-        {
-            manager.LoadScene(SceneIndexes.TITLE_SCREEN, SceneIndexes.GAME_MAP);
-        }
+        JUCLTimer.Create(() => { 
+            GameManager manager = GetGameManager();
+            if (manager != null)
+            {
+                manager.LoadScene(SceneIndexes.TITLE_SCREEN, SceneIndexes.GAME_MAP);
+            }
+        }, delay);
     }
 
-    public void LoadMainMenu()
+    public void LoadMainMenu(float delay)
     {
-        GameManager manager = GetGameManager();
-        if (manager != null)
-        {
-            manager.LoadScene(SceneIndexes.GAME_MAP, SceneIndexes.TITLE_SCREEN);
-        }
+        JUCLTimer.Create(() => { 
+            GameManager manager = GetGameManager();
+            if (manager != null)
+            {
+                manager.LoadScene(SceneIndexes.GAME_MAP, SceneIndexes.TITLE_SCREEN);
+            }
+        }, delay);
     }
 }
