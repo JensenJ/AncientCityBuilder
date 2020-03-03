@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JUCL.Utilities;
 
 public class GridNode
 {
-    private GridSystem<GridNode> grid;
+    private JUCLGrid<GridNode> grid;
     public int x;
     public int y;
     private bool isWalkable;
 
-    public GridNode(GridSystem<GridNode> grid, int x, int y)
+    public GridNode(JUCLGrid<GridNode> grid, int x, int y)
     {
         this.grid = grid;
         this.x = x;

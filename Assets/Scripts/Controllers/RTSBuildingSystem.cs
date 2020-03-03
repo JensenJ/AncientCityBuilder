@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JUCL.Utilities;
 
 [RequireComponent(typeof(RTSCameraController))]
 public class RTSBuildingSystem : MonoBehaviour
@@ -47,7 +48,7 @@ public class RTSBuildingSystem : MonoBehaviour
                     Destroy(ghostBuilding);
                 }
                 //Get mouse position and spawn new ghost building
-                RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main, layersToCheck);
+                RaycastHit hit = JUCLPhysicsUtils.GetMousePositionRaycastData(Camera.main, layersToCheck);
                 ghostBuilding = Instantiate(buildings[selectedBuilding - 1].buildingPrefab, hit.point, Quaternion.identity);
                 lastSelectedBuilding = selectedBuilding;
             }
@@ -57,7 +58,7 @@ public class RTSBuildingSystem : MonoBehaviour
         if(ghostBuilding != null)
         {
             //Get mouse position and move object to mouse cursor
-            RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main, layersToCheck);
+            RaycastHit hit = JUCLPhysicsUtils.GetMousePositionRaycastData(Camera.main, layersToCheck);
             //Snap to grid
             if (Input.GetKey(KeyCode.LeftControl))
             {

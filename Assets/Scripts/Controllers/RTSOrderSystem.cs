@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JUCL.Utilities;
 
 [RequireComponent(typeof(RTSCameraController))]
 public class RTSOrderSystem : MonoBehaviour
@@ -26,7 +27,7 @@ public class RTSOrderSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //Get mouse position
-            RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main, selectionLayers);
+            RaycastHit hit = JUCLPhysicsUtils.GetMousePositionRaycastData(Camera.main, selectionLayers);
             if (hit.collider != null)
             {
                 //Set selected transform to transform from collider
@@ -38,7 +39,7 @@ public class RTSOrderSystem : MonoBehaviour
         if (selectTransform != null && Input.GetMouseButtonDown(1))
         {
             //Get mouse position
-            RaycastHit hit = Utils.GetMousePositionRaycastData(Camera.main, targetLayers);
+            RaycastHit hit = JUCLPhysicsUtils.GetMousePositionRaycastData(Camera.main, targetLayers);
 
             //Get selected unit
             AIUnit unit = selectTransform.GetComponent<AIUnit>();

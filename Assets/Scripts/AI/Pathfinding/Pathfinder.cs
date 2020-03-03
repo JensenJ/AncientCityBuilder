@@ -6,6 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Burst;
 using Unity.Entities;
+using JUCL.Utilities;
 
 public class Pathfinder : ComponentSystem
 {
@@ -62,7 +63,7 @@ public class Pathfinder : ComponentSystem
     //Function to return array of pathnode
     private NativeArray<PathNode> GetPathNodeArray()
     {
-        GridSystem<GridNode> grid = AIGrid.Instance.pathfindingGrid;
+        JUCLGrid<GridNode> grid = AIGrid.Instance.pathfindingGrid;
         int2 gridSize = new int2(grid.GetWidth(), grid.GetHeight());
         NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.TempJob);
 
