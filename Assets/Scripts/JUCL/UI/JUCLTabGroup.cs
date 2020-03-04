@@ -59,6 +59,8 @@ namespace JUCL.UI
                 }
             }
 
+            canReselectTabs = false;
+
             //Callback on deselect
             if (selectedTab != null)
             {
@@ -81,7 +83,7 @@ namespace JUCL.UI
             for (int i = 0; i < objectsToSwap.Count; i++)
             {
                 if (i == index)
-                {
+                { 
                     if (handleTabEnabled)
                     {
                         //Try to get animator
@@ -176,6 +178,12 @@ namespace JUCL.UI
             //Disable header
             JUCLUIAnimator headerAnimator = GetComponent<JUCLUIAnimator>();
             headerAnimator.Disable();
+        }
+
+        //Function to set the tab reselection variable, useful for when menu's break out of the tab system
+        public void SetTabReselection(bool status)
+        {
+            canReselectTabs = status;
         }
     }
 }
